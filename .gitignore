@@ -1,0 +1,13 @@
+# Ambiente virtual
+venv/
+beluni_venv/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Django
+*.log
+
+# IDE
+.vscode/
