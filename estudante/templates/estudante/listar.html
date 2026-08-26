@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Estudantes</title>
+</head>
+<body>
+
+    <h1>Estudantes</h1>
+
+    <a href="{% url 'criar_estudante' %}">Cadastrar estudante</a>
+
+    <ul>
+        {% for estudante in estudantes %}
+            <li>
+                {{ estudante.nome }}
+                - CPF: {{ estudante.cpf }}
+
+                <a href="{% url 'detalhar_estudante' estudante.id %}">
+                    Ver detalhes
+                </a>
+            </li>
+        {% empty %}
+            <li>Nenhum estudante cadastrado.</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
