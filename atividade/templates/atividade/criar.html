@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Criar Atividade</title>
+</head>
+<body>
+
+    <h1>Criar Atividade</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        {% if form.errors %}
+            <p>Existem erros no formulário:</p>
+            {{ form.errors }}
+        {% endif %}
+
+        <button type="submit">Criar</button>
+    </form>
+
+    <a href="{% url 'listar_atividades' %}">Voltar</a>
+
+</body>
+</html>

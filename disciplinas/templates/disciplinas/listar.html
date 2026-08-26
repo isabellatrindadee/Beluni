@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Disciplinas</title>
+</head>
+<body>
+
+    <h1>Minhas Disciplinas</h1>
+
+    <a href="{% url 'criar_disciplina' %}">Criar disciplina</a>
+
+    <ul>
+        {% for disciplina in disciplinas %}
+            <li>{{ disciplina.NomeDisciplina }}</li>
+        {% empty %}
+            <li>Nenhuma disciplina cadastrada.</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

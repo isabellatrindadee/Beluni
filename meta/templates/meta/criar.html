@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Criar Meta</title>
+</head>
+<body>
+
+    <h1>Criar Meta</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">Criar</button>
+    </form>
+
+    <a href="{% url 'listar_metas' %}">Voltar</a>
+
+</body>
+</html>

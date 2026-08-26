@@ -3,7 +3,9 @@ from estudante.models import Estudante
 
 
 class Meta(models.Model):
+    titulo = models.CharField(max_length=100)
     descricao = models.CharField(max_length=255)
+    data = models.DateField()
     estudante = models.ForeignKey(
         Estudante,
         on_delete=models.CASCADE,
@@ -11,4 +13,4 @@ class Meta(models.Model):
     )
 
     def __str__(self):
-        return self.descricao
+        return self.titulo

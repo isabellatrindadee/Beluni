@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Metas</title>
+</head>
+<body>
+
+    <h1>Metas</h1>
+
+    <a href="{% url 'criar_meta' %}">Criar meta</a>
+
+    <ul>
+        {% for meta in metas %}
+            <li>
+                <strong>{{ meta.titulo }}</strong><br>
+                Descrição: {{ meta.descricao }}<br>
+                Data: {{ meta.data }}<br>
+                Estudante: {{ meta.estudante.nome }}
+            </li>
+        {% empty %}
+            <li>Nenhuma meta cadastrada.</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

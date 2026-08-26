@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Atividades</title>
+</head>
+<body>
+
+    <h1>Minhas Atividades</h1>
+
+    <a href="{% url 'criar_atividade' %}">Criar atividade</a>
+
+    <ul>
+        {% for atividade in atividades %}
+            <li>
+                <strong>{{ atividade.titulo }}</strong><br>
+                Data: {{ atividade.data }}<br>
+                Status: {{ atividade.status }}<br>
+                Prioridade: {{ atividade.prioridade }}<br>
+                Pontuação: {{ atividade.pontuacao }}
+            </li>
+        {% empty %}
+            <li>Nenhuma atividade cadastrada.</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
