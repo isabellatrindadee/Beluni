@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'disciplinas',
     'estudante',
     'atividade',
-    'notificação',
+    'notificacao',
     'meta',
 ]
 
