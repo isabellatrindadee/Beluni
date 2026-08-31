@@ -11,7 +11,21 @@
 
     <ul>
         {% for disciplina in disciplinas %}
-            <li>{{ disciplina.NomeDisciplina }}</li>
+            <li>
+                {{ disciplina.NomeDisciplina }}
+
+                <a href="{% url 'detalhar_disciplina' disciplina.id %}">
+                    Visualizar
+                </a>
+
+                <a href="{% url 'editar_disciplina' disciplina.id %}">
+                    Editar
+                </a>
+
+                <a href="{% url 'excluir_disciplina' disciplina.id %}">
+                    Excluir
+                </a>
+            </li>
         {% empty %}
             <li>Nenhuma disciplina cadastrada.</li>
         {% endfor %}
