@@ -5,7 +5,7 @@
 </head>
 <body>
 
-    <h1>Minhas Atividades</h1>
+    <h1>Atividades</h1>
 
     <a href="{% url 'criar_atividade' %}">Criar atividade</a>
 
@@ -13,11 +13,42 @@
         {% for atividade in atividades %}
             <li>
                 <strong>{{ atividade.titulo }}</strong><br>
+
                 Data: {{ atividade.data }}<br>
+
+                Detalhamento:
+                {{ atividade.detalhamento_atividade }}<br>
+
                 Status: {{ atividade.status }}<br>
+
                 Prioridade: {{ atividade.prioridade }}<br>
-                Pontuação: {{ atividade.pontuacao }}
+
+                Pontuação: {{ atividade.pontuacao }}<br>
+
+                Disciplinas:
+                {% for disciplina in atividade.disciplinas.all %}
+                    {{ disciplina.NomeDisciplina }}
+                    {% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    Nenhuma disciplina relacionada.
+                {% endfor %}
+                <br>
+
+                <a href="{% url 'detalhar_atividade' atividade.id %}">
+                    Detalhes
+                </a>
+
+                <a href="{% url 'editar_atividade' atividade.id %}">
+                    Editar
+                </a>
+
+                <a href="{% url 'excluir_atividade' atividade.id %}">
+                    Excluir
+                </a>
             </li>
+
+            <br>
+
         {% empty %}
             <li>Nenhuma atividade cadastrada.</li>
         {% endfor %}

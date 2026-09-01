@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Excluir Atividade</title>
+</head>
+<body>
+
+    <h1>Excluir Atividade</h1>
+
+    <p>
+        Tem certeza que deseja excluir
+        "{{ atividade.titulo }}"?
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <button type="submit">
+            Excluir
+        </button>
+    </form>
+
+    <a href="{% url 'listar_atividades' %}">
+        Cancelar
+    </a>
+
+</body>
+</html>

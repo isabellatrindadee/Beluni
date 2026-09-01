@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Atividade</title>
+</head>
+<body>
+
+    <h1>Editar Atividade</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">Salvar alterações</button>
+    </form>
+
+    <a href="{% url 'listar_atividades' %}">
+        Cancelar
+    </a>
+
+</body>
+</html>

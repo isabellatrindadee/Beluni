@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ atividade.titulo }}</title>
+</head>
+<body>
+
+    <h1>{{ atividade.titulo }}</h1>
+
+    <p>Data: {{ atividade.data }}</p>
+
+    <p>
+        Detalhamento:
+        {{ atividade.detalhamento_atividade }}
+    </p>
+
+    <p>Status: {{ atividade.status }}</p>
+
+    <p>Prioridade: {{ atividade.prioridade }}</p>
+
+    <p>Pontuação: {{ atividade.pontuacao }}</p>
+
+    <p>Disciplinas:</p>
+
+    <ul>
+        {% for disciplina in atividade.disciplinas.all %}
+            <li>{{ disciplina.NomeDisciplina }}</li>
+        {% empty %}
+            <li>Nenhuma disciplina relacionada.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'editar_atividade' atividade.id %}">
+        Editar
+    </a>
+
+    <a href="{% url 'listar_atividades' %}">
+        Voltar
+    </a>
+
+</body>
+</html>
