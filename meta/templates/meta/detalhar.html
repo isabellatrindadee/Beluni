@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ meta.titulo }}</title>
+</head>
+<body>
+
+    <h1>{{ meta.titulo }}</h1>
+
+    <p>Descrição: {{ meta.descricao }}</p>
+
+    <p>Data: {{ meta.data }}</p>
+
+    <p>Estudante: {{ meta.estudante.nome }}</p>
+
+    <a href="{% url 'editar_meta' meta.id %}">Editar</a>
+
+    <a href="{% url 'excluir_meta' meta.id %}">Excluir</a>
+
+    <a href="{% url 'listar_metas' %}">Voltar</a>
+
+</body>
+</html>

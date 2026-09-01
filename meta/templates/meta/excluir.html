@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Excluir Meta</title>
+</head>
+<body>
+
+    <h1>Excluir Meta</h1>
+
+    <p>
+        Tem certeza que deseja excluir "{{ meta.titulo }}"?
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <button type="submit">Excluir</button>
+    </form>
+
+    <a href="{% url 'listar_metas' %}">Cancelar</a>
+
+</body>
+</html>

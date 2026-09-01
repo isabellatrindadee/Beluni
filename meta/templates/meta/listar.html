@@ -13,10 +13,28 @@
         {% for meta in metas %}
             <li>
                 <strong>{{ meta.titulo }}</strong><br>
+
                 Descrição: {{ meta.descricao }}<br>
+
                 Data: {{ meta.data }}<br>
-                Estudante: {{ meta.estudante.nome }}
+
+                Estudante: {{ meta.estudante.nome }}<br>
+
+                <a href="{% url 'detalhar_meta' meta.id %}">
+                    Detalhes
+                </a>
+
+                <a href="{% url 'editar_meta' meta.id %}">
+                    Editar
+                </a>
+
+                <a href="{% url 'excluir_meta' meta.id %}">
+                    Excluir
+                </a>
             </li>
+
+            <br>
+
         {% empty %}
             <li>Nenhuma meta cadastrada.</li>
         {% endfor %}
