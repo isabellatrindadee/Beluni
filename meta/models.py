@@ -4,7 +4,7 @@ from estudante.models import Estudante
 
 class Meta(models.Model):
     titulo = models.CharField(max_length=100)
-    descricao = models.CharField(max_length=255)
+    detalhamento = models.CharField(max_length=255)
     data = models.DateField()
     estudante = models.ForeignKey(
         Estudante,
