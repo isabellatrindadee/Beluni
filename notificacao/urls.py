@@ -9,13 +9,19 @@ urlpatterns = [
     ),
 
     path(
-        'visualizar/<int:id>/',
-        views.visualizar_notificacao,
-        name='visualizar_notificacao'
+        '<int:id>/',
+        views.detalhar_notificacao,
+        name='detalhar_notificacao'
     ),
 
     path(
-        'excluir/<int:id>/',
+        '<int:id>/editar/',
+        views.editar_notificacao,
+        name='editar_notificacao'
+    ),
+
+    path(
+        '<int:id>/excluir/',
         views.excluir_notificacao,
         name='excluir_notificacao'
     ),

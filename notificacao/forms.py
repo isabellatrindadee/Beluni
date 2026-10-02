@@ -5,9 +5,15 @@ from .models import Notificacao
 class NotificacaoForm(forms.ModelForm):
     class Meta:
         model = Notificacao
-        fields = ['mensagem', 'estudante']
+        fields = ['lida']
 
         labels = {
-            'mensagem': 'Mensagem',
-            'estudante': 'Estudante',
+            'lida': 'Status',
+        }
+
+        widgets = {
+            'lida': forms.Select(choices=[
+                (False, 'Não lida'),
+                (True, 'Lida'),
+            ]),
         }

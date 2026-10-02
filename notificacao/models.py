@@ -20,5 +20,7 @@ class Notificacao(models.Model):
         blank=True
     )
 
+    lida = models.BooleanField(default=False)
+
     def __str__(self):
         return self.mensagem
