@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import login_required, permission_required
 
 from .models import Notificacao
 from .forms import NotificacaoForm
 
 
+@login_required
 @permission_required('notificacao.view_notificacao')
 def listar_notificacoes(request):
     notificacoes = Notificacao.objects.all()
@@ -16,6 +17,7 @@ def listar_notificacoes(request):
     )
 
 
+@login_required
 @permission_required('notificacao.view_notificacao')
 def detalhar_notificacao(request, id):
     notificacao = get_object_or_404(Notificacao, id=id)
@@ -27,6 +29,7 @@ def detalhar_notificacao(request, id):
     )
 
 
+@login_required
 @permission_required('notificacao.change_notificacao')
 def editar_notificacao(request, id):
     notificacao = get_object_or_404(Notificacao, id=id)
@@ -55,6 +58,7 @@ def editar_notificacao(request, id):
     )
 
 
+@login_required
 @permission_required('notificacao.delete_notificacao')
 def excluir_notificacao(request, id):
     notificacao = get_object_or_404(Notificacao, id=id)

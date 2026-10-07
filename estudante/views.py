@@ -35,6 +35,8 @@ def logout_estudante(request):
     return redirect('login_estudante')
 
 
+@login_required
+@permission_required('estudante.add_estudante')
 def criar_estudante(request):
     if request.method == 'POST':
         form = EstudanteForm(request.POST)

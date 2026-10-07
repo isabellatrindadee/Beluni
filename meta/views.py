@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import login_required, permission_required
 
 from .models import Meta
 from .forms import MetaForm
 
 
+@login_required
 @permission_required('meta.view_meta')
 def listar_metas(request):
     metas = Meta.objects.all()
@@ -16,6 +17,7 @@ def listar_metas(request):
     )
 
 
+@login_required
 @permission_required('meta.add_meta')
 def criar_meta(request):
     if request.method == 'POST':
@@ -34,6 +36,7 @@ def criar_meta(request):
     )
 
 
+@login_required
 @permission_required('meta.view_meta')
 def detalhar_meta(request, id):
     meta = get_object_or_404(Meta, id=id)
@@ -45,6 +48,7 @@ def detalhar_meta(request, id):
     )
 
 
+@login_required
 @permission_required('meta.change_meta')
 def editar_meta(request, id):
     meta = get_object_or_404(Meta, id=id)
@@ -68,6 +72,7 @@ def editar_meta(request, id):
     )
 
 
+@login_required
 @permission_required('meta.delete_meta')
 def excluir_meta(request, id):
     meta = get_object_or_404(Meta, id=id)
