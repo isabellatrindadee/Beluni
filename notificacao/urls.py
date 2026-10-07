@@ -25,4 +25,4 @@ urlpatterns = [
         views.excluir_notificacao,
         name='excluir_notificacao'
     ),
-]
+] 

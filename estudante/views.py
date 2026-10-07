@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 
 from .models import Estudante
 from .forms import EstudanteForm
@@ -62,6 +62,7 @@ def criar_estudante(request):
 
 
 @login_required
+@permission_required('estudante.view_estudante')
 def listar_estudantes(request):
     estudantes = Estudante.objects.all()
 
@@ -73,6 +74,7 @@ def listar_estudantes(request):
 
 
 @login_required
+@permission_required('estudante.view_estudante')
 def detalhar_estudante(request, id):
     estudante = get_object_or_404(Estudante, id=id)
 
@@ -84,11 +86,15 @@ def detalhar_estudante(request, id):
 
 
 @login_required
+@permission_required('estudante.change_estudante')
 def editar_estudante(request, id):
     estudante = get_object_or_404(Estudante, id=id)
 
     if request.method == 'POST':
-        form = EstudanteForm(request.POST, instance=estudante)
+        form = EstudanteForm(
+            request.POST,
+            instance=estudante
+        )
 
         if form.is_valid():
             estudante = form.save(commit=False)
@@ -116,6 +122,7 @@ def editar_estudante(request, id):
 
 
 @login_required
+@permission_required('estudante.delete_estudante')
 def excluir_estudante(request, id):
     estudante = get_object_or_404(Estudante, id=id)
 

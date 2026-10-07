@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import permission_required
+
 from .models import Disciplina
 from .forms import DisciplinaForm
 
 
+@permission_required('disciplinas.view_disciplina')
 def listar_disciplinas(request):
     disciplinas = Disciplina.objects.all()
 
@@ -13,6 +16,7 @@ def listar_disciplinas(request):
     )
 
 
+@permission_required('disciplinas.add_disciplina')
 def criar_disciplina(request):
     if request.method == 'POST':
         form = DisciplinaForm(request.POST)
@@ -30,6 +34,7 @@ def criar_disciplina(request):
     )
 
 
+@permission_required('disciplinas.view_disciplina')
 def detalhar_disciplina(request, id):
     disciplina = get_object_or_404(Disciplina, id=id)
 
@@ -40,15 +45,19 @@ def detalhar_disciplina(request, id):
     )
 
 
+@permission_required('disciplinas.change_disciplina')
 def editar_disciplina(request, id):
     disciplina = get_object_or_404(Disciplina, id=id)
 
     if request.method == 'POST':
-        form = DisciplinaForm(request.POST, instance=disciplina)
+        form = DisciplinaForm(
+            request.POST,
+            instance=disciplina
+        )
 
         if form.is_valid():
             form.save()
-            return redirect('detalhar_disciplina', id=disciplina.id)
+            return redirect('listar_disciplinas')
     else:
         form = DisciplinaForm(instance=disciplina)
 
@@ -62,6 +71,7 @@ def editar_disciplina(request, id):
     )
 
 
+@permission_required('disciplinas.delete_disciplina')
 def excluir_disciplina(request, id):
     disciplina = get_object_or_404(Disciplina, id=id)
 

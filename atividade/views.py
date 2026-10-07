@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import permission_required
+
 from .models import Atividade
 from .forms import AtividadeForm
 
 
+@permission_required('atividade.view_atividade')
 def listar_atividades(request):
     atividades = Atividade.objects.all()
 
@@ -13,6 +16,7 @@ def listar_atividades(request):
     )
 
 
+@permission_required('atividade.add_atividade')
 def criar_atividade(request):
     if request.method == 'POST':
         form = AtividadeForm(request.POST)
@@ -30,6 +34,7 @@ def criar_atividade(request):
     )
 
 
+@permission_required('atividade.view_atividade')
 def detalhar_atividade(request, id):
     atividade = get_object_or_404(Atividade, id=id)
 
@@ -40,6 +45,7 @@ def detalhar_atividade(request, id):
     )
 
 
+@permission_required('atividade.change_atividade')
 def editar_atividade(request, id):
     atividade = get_object_or_404(Atividade, id=id)
 
@@ -62,6 +68,7 @@ def editar_atividade(request, id):
     )
 
 
+@permission_required('atividade.delete_atividade')
 def excluir_atividade(request, id):
     atividade = get_object_or_404(Atividade, id=id)
 
