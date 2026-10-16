@@ -1,42 +1,128 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ atividade.titulo }}</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h1>{{ atividade.titulo }}</h1>
+{% block titulo %}{{ atividade.titulo }} | Beluni{% endblock %}
 
-    <p>Data: {{ atividade.data }}</p>
+{% block conteudo %}
+<div class="container py-3">
 
-    <p>
-        Detalhamento:
-        {{ atividade.detalhamento_atividade }}
-    </p>
+    <div class="mb-4">
+        <a href="{% url 'listar_atividades' %}" class="btn btn-outline-primary mb-4">
+            ← Voltar para atividades
+        </a>
+    </div>
 
-    <p>Status: {{ atividade.status }}</p>
+    <div class="card p-4 p-md-5">
 
-    <p>Prioridade: {{ atividade.prioridade }}</p>
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+            <div>
+                <p class="text-uppercase small fw-semibold text-secondary mb-2">
+                    Detalhes da atividade
+                </p>
 
-    <p>Pontuação: {{ atividade.pontuacao }}</p>
+                <h1 class="titulo-pagina mb-0">
+                    {{ atividade.titulo }}
+                </h1>
+            </div>
 
-    <p>Disciplinas:</p>
+            <span class="badge rounded-pill px-3 py-2"
+                  style="background-color: #E8DDC8; color: #20494A;">
+                {{ atividade.get_status_display|default:atividade.status }}
+            </span>
+        </div>
 
-    <ul>
-        {% for disciplina in atividade.disciplinas.all %}
-            <li>{{ disciplina.NomeDisciplina }}</li>
+        <hr style="border-color: #E5E2D9;">
+
+        <h5 class="mb-3" style="color: #20494A;">
+            Informações gerais
+        </h5>
+
+        <div class="row g-3 mb-4">
+
+            <div class="col-md-6">
+                <div class="p-3 rounded-3 h-100"
+                     style="background-color: #F7F5EF;">
+                    <span class="small text-secondary">Data</span>
+                    <p class="fw-semibold mb-0">
+                        {{ atividade.data|date:"d/m/Y" }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3 rounded-3 h-100"
+                     style="background-color: #F7F5EF;">
+                    <span class="small text-secondary">Prioridade</span>
+                    <p class="fw-semibold mb-0">
+                        {{ atividade.get_prioridade_display|default:atividade.prioridade }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3 rounded-3 h-100"
+                     style="background-color: #F7F5EF;">
+                    <span class="small text-secondary">Pontuação</span>
+                    <p class="fw-semibold mb-0">
+                        {{ atividade.pontuacao }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="p-3 rounded-3"
+                     style="background-color: #F7F5EF;">
+                    <span class="small text-secondary">Detalhamento</span>
+                    <p class="mb-0">
+                        {{ atividade.detalhamento_atividade|default:"Não informado."|linebreaksbr }}
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <hr style="border-color: #E5E2D9;">
+
+        <h5 class="mb-3" style="color: #20494A;">
+            Disciplinas relacionadas
+        </h5>
+
+        {% for item in atividade.atividadeinterdisciplinar_set.all %}
+            <div class="p-3 p-md-4 mb-3 rounded-3"
+                 style="background-color: #F7F5EF;">
+
+                <h6 class="fw-bold mb-3" style="color: #20494A;">
+                    {{ item.disciplina.nomedisciplina }}
+                </h6>
+
+                <p class="mb-2">
+                    <strong>Critérios de avaliação:</strong><br>
+                    {{ item.criterios_de_avaliacao|default:"Não informado." }}
+                </p>
+
+                <p class="mb-0">
+                    <strong>Orientador:</strong><br>
+                    {{ item.orientador|default:"Não informado." }}
+                </p>
+
+            </div>
         {% empty %}
-            <li>Nenhuma disciplina relacionada.</li>
+            <p class="text-secondary">
+                Nenhuma disciplina relacionada a esta atividade.
+            </p>
         {% endfor %}
-    </ul>
 
-    <a href="{% url 'editar_atividade' atividade.id %}">
-        Editar
-    </a>
+        <div class="d-flex flex-wrap gap-2 mt-4">
+            <a href="{% url 'editar_atividade' atividade.id %}"
+               class="btn btn-primary">
+                Editar atividade
+            </a>
 
-    <a href="{% url 'listar_atividades' %}">
-        Voltar
-    </a>
+            <a href="{% url 'listar_atividades' %}"
+               class="btn btn-outline-primary">
+                Voltar para a lista
+            </a>
+        </div>
 
-</body>
-</html>
+    </div>
+</div>
+{% endblock %}

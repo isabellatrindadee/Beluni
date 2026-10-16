@@ -2,13 +2,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
 
 from .models import Atividade
-from .forms import AtividadeForm
+from .forms import (
+    AtividadeForm,
+    AtividadeInterdisciplinarFormSet,
+)
 
 
 @login_required
 @permission_required('atividade.view_atividade')
 def listar_atividades(request):
-    atividades = Atividade.objects.all()
+    atividades = Atividade.objects.prefetch_related('disciplinas').all()
 
     return render(
         request,
@@ -22,24 +25,42 @@ def listar_atividades(request):
 def criar_atividade(request):
     if request.method == 'POST':
         form = AtividadeForm(request.POST)
+        formset = AtividadeInterdisciplinarFormSet(
+            request.POST,
+            prefix='disciplinas'
+        )
 
-        if form.is_valid():
-            form.save()
+        if form.is_valid() and formset.is_valid():
+            atividade = form.save()
+            formset.instance = atividade
+            formset.save()
             return redirect('listar_atividades')
     else:
         form = AtividadeForm()
+        formset = AtividadeInterdisciplinarFormSet(
+            prefix='disciplinas'
+        )
 
     return render(
         request,
         'atividade/criar.html',
-        {'form': form}
+        {
+            'form': form,
+            'formset': formset,
+        }
     )
 
 
 @login_required
 @permission_required('atividade.view_atividade')
 def detalhar_atividade(request, id):
-    atividade = get_object_or_404(Atividade, id=id)
+    atividade = get_object_or_404(
+        Atividade.objects.prefetch_related(
+            'disciplinas',
+            'atividadeinterdisciplinar_set',
+        ),
+        id=id
+    )
 
     return render(
         request,
@@ -54,20 +75,34 @@ def editar_atividade(request, id):
     atividade = get_object_or_404(Atividade, id=id)
 
     if request.method == 'POST':
-        form = AtividadeForm(request.POST, instance=atividade)
+        form = AtividadeForm(
+            request.POST,
+            instance=atividade
+        )
+        formset = AtividadeInterdisciplinarFormSet(
+            request.POST,
+            instance=atividade,
+            prefix='disciplinas'
+        )
 
-        if form.is_valid():
+        if form.is_valid() and formset.is_valid():
             form.save()
+            formset.save()
             return redirect('listar_atividades')
     else:
         form = AtividadeForm(instance=atividade)
+        formset = AtividadeInterdisciplinarFormSet(
+            instance=atividade,
+            prefix='disciplinas'
+        )
 
     return render(
         request,
         'atividade/editar.html',
         {
             'form': form,
-            'atividade': atividade
+            'formset': formset,
+            'atividade': atividade,
         }
     )
 

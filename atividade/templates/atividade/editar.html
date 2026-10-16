@@ -1,23 +1,231 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Editar Atividade</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h1>Editar Atividade</h1>
+{% block titulo %}Editar atividade | Beluni{% endblock %}
 
-    <form method="POST">
-        {% csrf_token %}
+{% block conteudo %}
 
-        {{ form.as_p }}
+<div class="mb-4 mx-auto" style="max-width: 1050px;">
 
-        <button type="submit">Salvar alterações</button>
-    </form>
-
-    <a href="{% url 'listar_atividades' %}">
-        Cancelar
+    <a href="{% url 'listar_atividades' %}"
+       class="btn btn-outline-primary mb-4">
+        ← Voltar para atividades
     </a>
 
-</body>
-</html>
+    <p class="text-uppercase small fw-bold mb-2"
+       style="color: #758080; letter-spacing: 1.5px;">
+        ORGANIZE SEUS ESTUDOS
+    </p>
+
+    <h1 class="titulo-pagina mb-2">Editar atividade</h1>
+
+    <p class="text-secondary mb-0">
+        Atualize os dados da sua tarefa e mantenha seus estudos organizados.
+    </p>
+
+</div>
+
+<div class="card mx-auto" style="width: 100%; max-width: 1050px;">
+    <div class="card-body p-4 p-md-5">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <h4 class="mb-4" style="color: #20494A;">
+                Informações da atividade
+            </h4>
+
+            {% for field in form %}
+                <div class="mb-4">
+
+                    <label for="{{ field.id_for_label }}"
+                           class="form-label fw-semibold"
+                           style="color: #293B3B;">
+                        {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <div class="form-text">{{ field.help_text }}</div>
+                    {% endif %}
+
+                    {% for error in field.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+            {% endfor %}
+
+            <hr class="my-4" style="border-color: #E5E2D9;">
+
+            <h4 class="mb-2" style="color: #20494A;">
+                Disciplinas relacionadas
+            </h4>
+
+            <p class="text-secondary mb-4">
+                Edite as disciplinas existentes ou adicione outras à atividade.
+            </p>
+
+            {{ formset.management_form }}
+
+            {% if formset.non_form_errors %}
+                <div class="alert alert-danger">
+                    {{ formset.non_form_errors }}
+                </div>
+            {% endif %}
+
+            <div id="disciplinas-container">
+
+                {% for subform in formset %}
+                    <div class="disciplina-item rounded-3 p-3 p-md-4 mb-3"
+                         style="background-color: #F7F5EF; border: 1px solid #E5E2D9;">
+
+                        {% for hidden in subform.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0" style="color: #20494A;">
+                                Disciplina <span class="numero-disciplina">{{ forloop.counter }}</span>
+                            </h6>
+                        </div>
+
+                        {% for field in subform.visible_fields %}
+                            {% if field.name != 'DELETE' %}
+                                <div class="mb-3">
+
+                                    <label for="{{ field.id_for_label }}"
+                                           class="form-label fw-semibold">
+                                        {{ field.label }}
+                                    </label>
+
+                                    {{ field }}
+
+                                    {% for error in field.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if subform.DELETE %}
+                            <div class="form-check mt-3">
+                                {{ subform.DELETE }}
+                                <label class="form-check-label text-danger"
+                                       for="{{ subform.DELETE.id_for_label }}">
+                                    Remover esta disciplina ao salvar
+                                </label>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                {% endfor %}
+
+            </div>
+
+            <button type="button"
+                    id="adicionar-disciplina"
+                    class="btn btn-outline-primary mb-4">
+                + Adicionar disciplina
+            </button>
+
+            <div id="form-vazio" class="d-none">
+                <div class="disciplina-item rounded-3 p-3 p-md-4 mb-3"
+                     style="background-color: #F7F5EF; border: 1px solid #E5E2D9;">
+
+                    {% for hidden in formset.empty_form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+
+                    <h6 class="fw-bold mb-3" style="color: #20494A;">
+                        Nova disciplina
+                    </h6>
+
+                    {% for field in formset.empty_form.visible_fields %}
+                        {% if field.name != 'DELETE' %}
+                            <div class="mb-3">
+
+                                <label for="{{ field.id_for_label }}"
+                                       class="form-label fw-semibold">
+                                    {{ field.label }}
+                                </label>
+
+                                {{ field }}
+
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if formset.empty_form.DELETE %}
+                        <div class="form-check mt-3">
+                            {{ formset.empty_form.DELETE }}
+                            <label class="form-check-label text-danger"
+                                   for="{{ formset.empty_form.DELETE.id_for_label }}">
+                                Remover esta disciplina ao salvar
+                            </label>
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 pt-4"
+                 style="border-top: 1px solid #E5E2D9;">
+
+                <button type="submit" class="btn btn-primary">
+                    Salvar alterações
+                </button>
+
+                <a href="{% url 'listar_atividades' %}"
+                   class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const container = document.getElementById('disciplinas-container');
+    const botaoAdicionar = document.getElementById('adicionar-disciplina');
+    const totalForms = document.getElementById('id_disciplinas-TOTAL_FORMS');
+    const modelo = document.querySelector('#form-vazio .disciplina-item');
+
+    if (!container || !botaoAdicionar || !totalForms || !modelo) {
+        return;
+    }
+
+    botaoAdicionar.addEventListener('click', function () {
+        const indice = Number(totalForms.value);
+        const novoHTML = modelo.outerHTML.replace(/__prefix__/g, indice);
+
+        container.insertAdjacentHTML('beforeend', novoHTML);
+        totalForms.value = indice + 1;
+
+        const novosItens = container.querySelectorAll('.disciplina-item');
+        const novoItem = novosItens[novosItens.length - 1];
+
+        const titulo = novoItem.querySelector('h6');
+        if (titulo) {
+            titulo.textContent = 'Nova disciplina';
+        }
+    });
+});
+</script>
+
+{% endblock %}

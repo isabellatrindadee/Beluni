@@ -1,58 +1,187 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Atividades</title>
-</head>
-<body>
 
-    <h1>Atividades</h1>
+{% extends 'base.html' %}
 
-    <a href="{% url 'criar_atividade' %}">Criar atividade</a>
+{% block titulo %}Atividades | Beluni{% endblock %}
 
-    <ul>
-        {% for atividade in atividades %}
-            <li>
-                <strong>{{ atividade.titulo }}</strong><br>
+{% block conteudo %}
 
-                Data: {{ atividade.data }}<br>
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <p class="text-uppercase small fw-bold mb-2"
+           style="color: #758080; letter-spacing: 1.5px;">
+            SEU ESPAÇO DE ESTUDOS
+        </p>
 
-                Detalhamento:
-                {{ atividade.detalhamento_atividade }}<br>
+        <h1 class="titulo-pagina mb-2">Minhas atividades</h1>
 
-                Status: {{ atividade.status }}<br>
+        <p class="text-secondary mb-0">
+            Organize suas tarefas e acompanhe seus prazos.
+        </p>
+    </div>
 
-                Prioridade: {{ atividade.prioridade }}<br>
+    <a href="{% url 'criar_atividade' %}" class="btn btn-primary">
+        <span class="me-1">+</span> Nova atividade
+    </a>
+</div>
 
-                Pontuação: {{ atividade.pontuacao }}<br>
+<div class="card">
+    <div class="card-body p-0">
 
-                Disciplinas:
-                {% for disciplina in atividade.disciplinas.all %}
-                    {{ disciplina.NomeDisciplina }}
-                    {% if not forloop.last %}, {% endif %}
-                {% empty %}
-                    Nenhuma disciplina relacionada.
-                {% endfor %}
-                <br>
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 p-4"
+             style="border-bottom: 1px solid #E5E2D9;">
+            <div>
+                <h5 class="mb-1 fw-bold" style="color: #20494A;">
+                    Lista de atividades
+                </h5>
+                <p class="text-secondary small mb-0">
+                    Acompanhe suas tarefas cadastradas.
+                </p>
+            </div>
 
-                <a href="{% url 'detalhar_atividade' atividade.id %}">
-                    Detalhes
-                </a>
+            <span class="badge rounded-pill px-3 py-2"
+                  style="background-color: #E8DDC8; color: #173839;">
+                {{ atividades|length }}
+                {% if atividades|length == 1 %}
+                    atividade
+                {% else %}
+                    atividades
+                {% endif %}
+            </span>
+        </div>
 
-                <a href="{% url 'editar_atividade' atividade.id %}">
-                    Editar
-                </a>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">Título</th>
+                        <th>Data de entrega</th>
+                        <th>Disciplina</th>
+                        <th>Status</th>
+                        <th>Prioridade</th>
+                        <th class="text-end pe-4">Ações</th>
+                    </tr>
+                </thead>
 
-                <a href="{% url 'excluir_atividade' atividade.id %}">
-                    Excluir
-                </a>
-            </li>
+                <tbody>
+                    {% for atividade in atividades %}
+                    <tr>
+                        <td class="ps-4">
+                            <span class="fw-semibold" style="color: #293B3B;">
+                                {{ atividade.titulo }}
+                            </span>
+                        </td>
 
-            <br>
+                        <td>
+                            <span class="text-secondary">
+                                {{ atividade.data|date:"d/m/Y" }}
+                            </span>
+                        </td>
 
-        {% empty %}
-            <li>Nenhuma atividade cadastrada.</li>
-        {% endfor %}
-    </ul>
+                        <td>
+                            {% for disciplina in atividade.disciplinas.all %}
+                                <span class="badge rounded-pill fw-medium mb-1"
+                                      style="background-color: #F1EBDD; color: #20494A;">
+                                    {{ disciplina.nomedisciplina }}
+                                </span>
+                            {% empty %}
+                                <span class="text-secondary small">
+                                    Sem disciplina
+                                </span>
+                            {% endfor %}
+                        </td>
 
-</body>
-</html>
+                        <td>
+                            {% if atividade.status == 'concluida' %}
+                                <span class="badge rounded-pill fw-medium"
+                                      style="background-color: #DCECE2; color: #285C42;">
+                                    Concluída
+                                </span>
+                            {% elif atividade.status == 'em_andamento' %}
+                                <span class="badge rounded-pill fw-medium"
+                                      style="background-color: #DCE9E8; color: #20494A;">
+                                    Em andamento
+                                </span>
+                            {% else %}
+                                <span class="badge rounded-pill fw-medium"
+                                      style="background-color: #F4E8CC; color: #795A20;">
+                                    Pendente
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if atividade.prioridade == 'alta' %}
+                                <span class="badge rounded-pill fw-medium"
+                                      style="background-color: #F4DEDA; color: #963F34;">
+                                    Alta
+                                </span>
+                            {% elif atividade.prioridade == 'media' %}
+                                <span class="badge rounded-pill fw-medium"
+                                      style="background-color: #F4E8CC; color: #795A20;">
+                                    Média
+                                </span>
+                            {% else %}
+                                <span class="badge rounded-pill fw-medium"
+                                      style="background-color: #DCE9E8; color: #20494A;">
+                                    Baixa
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td class="text-end pe-4">
+                            <div class="d-flex flex-wrap justify-content-end gap-2">
+                                <a href="{% url 'detalhar_atividade' atividade.id %}"
+                                   class="btn btn-sm btn-outline-primary">
+                                    Ver
+                                </a>
+
+                                <a href="{% url 'editar_atividade' atividade.id %}"
+                                   class="btn btn-sm btn-outline-secondary">
+                                    Editar
+                                </a>
+
+                                <a href="{% url 'excluir_atividade' atividade.id %}"
+                                   class="btn btn-sm btn-outline-danger">
+                                    Excluir
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 px-3">
+                            <div class="mb-3">
+                                <span style="font-size: 2.5rem; color: #20494A;">
+                                    ♧
+                                </span>
+                            </div>
+
+                            <h5 class="fw-bold mb-2" style="color: #20494A;">
+                                Nenhuma atividade por aqui
+                            </h5>
+
+                            <p class="text-secondary mb-4">
+                                Adicione sua primeira tarefa e comece a organizar seus estudos.
+                            </p>
+
+                            <a href="{% url 'criar_atividade' %}"
+                               class="btn btn-primary">
+                                + Criar atividade
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="px-4 py-3 small text-secondary"
+             style="border-top: 1px solid #E5E2D9;">
+            Mantenha suas atividades em dia, uma tarefa de cada vez.
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

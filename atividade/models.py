@@ -34,5 +34,9 @@ class AtividadeInterdisciplinar(models.Model):
     criterios_de_avaliacao = models.CharField(max_length=255)
     orientador = models.CharField(max_length=100)
 
+    class Meta:
+        verbose_name = "Atividade interdisciplinar"
+        verbose_name_plural = "Atividades interdisciplinares"
+
     def __str__(self):
         return f"{self.atividade} - {self.disciplina}"
