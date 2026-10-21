@@ -1,73 +1,159 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+```html
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Notificações</title>
-</head>
+{% block titulo %}Notificações | Beluni{% endblock %}
 
-<body>
+{% block conteudo %}
 
-    <h1>Notificações</h1>
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <p class="text-uppercase small fw-bold mb-2"
+           style="color: #758080; letter-spacing: 1.5px;">
+            FIQUE POR DENTRO
+        </p>
 
-    {% if notificacoes %}
+        <h1 class="titulo-pagina mb-2">Minhas notificações</h1>
 
-        <ul>
+        <p class="text-secondary mb-0">
+            Acompanhe os avisos e as atualizações das suas atividades.
+        </p>
+    </div>
+</div>
 
-            {% for notificacao in notificacoes %}
+<div class="card">
+    <div class="card-body p-0">
 
-                <li>
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 p-4"
+             style="border-bottom: 1px solid #E5E2D9;">
 
-                    <strong>
-                        {{ notificacao.mensagem }}
-                    </strong>
+            <div>
+                <h5 class="mb-1 fw-bold" style="color: #20494A;">
+                    Lista de notificações
+                </h5>
 
-                    <br>
+                <p class="text-secondary small mb-0">
+                    Consulte e gerencie suas notificações.
+                </p>
+            </div>
 
-                    Estudante:
-                    {{ notificacao.estudante.nome }}
+            <span class="badge rounded-pill px-3 py-2"
+                  style="background-color: #E8DDC8; color: #173839;">
+                {{ notificacoes|length }}
+                {% if notificacoes|length == 1 %}
+                    notificação
+                {% else %}
+                    notificações
+                {% endif %}
+            </span>
+        </div>
 
-                    <br>
+        {% if notificacoes %}
 
-                    Status:
-                    {% if notificacao.lida %}
-                        Lida
-                    {% else %}
-                        Não lida
-                    {% endif %}
+            <div class="list-group list-group-flush">
 
-                    <br><br>
+                {% for notificacao in notificacoes %}
 
-                    <a href="{% url 'detalhar_notificacao' notificacao.id %}">
-                        Detalhes
-                    </a>
+                    <div class="list-group-item p-4">
 
-                    |
+                        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
 
-                    <a href="{% url 'editar_notificacao' notificacao.id %}">
-                        Editar status
-                    </a>
+                            <div class="d-flex align-items-start gap-3 flex-grow-1">
 
-                    |
+                                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                     style="width: 42px; height: 42px; background-color: #E8DDC8; color: #20494A;">
+                                    <span class="fw-bold">
+                                        {% if not notificacao.lida %}
+                                            !
+                                        {% else %}
+                                            ✓
+                                        {% endif %}
+                                    </span>
+                                </div>
 
-                    <a href="{% url 'excluir_notificacao' notificacao.id %}">
-                        Excluir
-                    </a>
+                                <div class="flex-grow-1">
 
-                </li>
+                                    <h6 class="fw-bold mb-2"
+                                        style="color: #20494A;">
+                                        {{ notificacao.titulo|default:"Notificação" }}
+                                    </h6>
 
-                <br>
+                                    <p class="text-secondary mb-2">
+                                        {{ notificacao.mensagem|default:notificacao }}
+                                    </p>
 
-            {% endfor %}
+                                    {% if not notificacao.lida %}
+                                        <span class="badge rounded-pill"
+                                              style="background-color: #F4E8CC; color: #795A20;">
+                                            Não lida
+                                        </span>
+                                    {% else %}
+                                        <span class="badge rounded-pill"
+                                              style="background-color: #DDECE5; color: #285B46;">
+                                            Lida
+                                        </span>
+                                    {% endif %}
 
-        </ul>
+                                    {% if notificacao.data_criacao %}
+                                        <div class="mt-2">
+                                            <small class="text-secondary">
+                                                {{ notificacao.data_criacao|date:"d/m/Y H:i" }}
+                                            </small>
+                                        </div>
+                                    {% endif %}
 
-    {% else %}
+                                </div>
+                            </div>
 
-        <p>Nenhuma notificação disponível.</p>
+                            <div class="d-flex flex-wrap gap-2">
 
-    {% endif %}
+                                <a href="{% url 'notificacao:visualizar_notificacao' notificacao.pk %}"
+                                   class="btn btn-sm btn-outline-primary">
+                                    Visualizar
+                                </a>
 
-</body>
+                                <a href="{% url 'notificacao:editar_notificacao' notificacao.pk %}"
+                                   class="btn btn-sm btn-outline-secondary">
+                                    Editar
+                                </a>
 
-</html>
+                                <a href="{% url 'notificacao:excluir_notificacao' notificacao.pk %}"
+                                   class="btn btn-sm btn-outline-danger">
+                                    Excluir
+                                </a>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="text-center py-5 px-4">
+
+                <div class="mb-3"
+                     style="font-size: 2.5rem; color: #758080;">
+                    ♧
+                </div>
+
+                <h5 class="fw-bold mb-2" style="color: #20494A;">
+                    Nenhuma notificação por enquanto
+                </h5>
+
+                <p class="text-secondary mb-0">
+                    Quando houver novidades sobre suas atividades,
+                    elas aparecerão aqui.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
+```

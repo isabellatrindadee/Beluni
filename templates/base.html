@@ -1,4 +1,4 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -219,18 +219,21 @@
                             Atividades
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="menu-link" href="{% url 'listar_disciplinas' %}">
                             Disciplinas
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="menu-link" href="{% url 'listar_metas' %}">
                             Metas
                         </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="menu-link" href="{% url 'listar_notificacoes' %}">
+                        <a class="menu-link" href="{% url 'notificacao:listar_notificacoes' %}">
                             Notificações
                         </a>
                     </li>
@@ -245,8 +248,13 @@
                 <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show"
                      role="alert">
                     {{ message }}
-                    <button type="button" class="btn-close"
-                            data-bs-dismiss="alert" aria-label="Fechar"></button>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Fechar">
+                    </button>
                 </div>
             {% endfor %}
         {% endif %}

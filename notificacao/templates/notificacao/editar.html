@@ -1,33 +1,76 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+```html
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Editar Notificação</title>
-</head>
+{% block titulo %}Editar notificação | Beluni{% endblock %}
 
-<body>
+{% block conteudo %}
 
-    <h1>Editar Notificação</h1>
-
-    <p>
-        {{ notificacao.mensagem }}
+<div class="mb-4">
+    <p class="text-uppercase small fw-bold mb-2"
+       style="color: #758080; letter-spacing: 1.5px;">
+        CENTRAL DE NOTIFICAÇÕES
     </p>
 
-    <form method="POST">
-        {% csrf_token %}
+    <h1 class="titulo-pagina mb-2">Editar notificação</h1>
 
-        {{ form.as_p }}
+    <p class="text-secondary">
+        Atualize as informações da notificação.
+    </p>
+</div>
 
-        <button type="submit">
-            Salvar
-        </button>
-    </form>
+<div class="card">
+    <div class="card-body p-4">
 
-    <a href="{% url 'listar_notificacoes' %}">
-        Cancelar
-    </a>
+        <form method="post">
+            {% csrf_token %}
 
-</body>
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
 
-</html>
+            {% for campo in form %}
+                <div class="mb-4">
+
+                    <label for="{{ campo.id_for_label }}"
+                           class="form-label fw-bold"
+                           style="color: #20494A;">
+                        {{ campo.label }}
+                    </label>
+
+                    {{ campo }}
+
+                    {% if campo.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ campo.errors }}
+                        </div>
+                    {% endif %}
+
+                    {% if campo.help_text %}
+                        <div class="form-text">
+                            {{ campo.help_text }}
+                        </div>
+                    {% endif %}
+
+                </div>
+            {% endfor %}
+
+            <div class="d-flex flex-wrap gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">
+                    Salvar alterações
+                </button>
+
+                <a href="{% url 'notificacao:visualizar_notificacao' notificacao.pk %}"
+                   class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}
+```

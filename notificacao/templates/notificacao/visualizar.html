@@ -1,48 +1,91 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+```html
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Visualizar Notificação</title>
-</head>
+{% block titulo %}Visualizar notificação | Beluni{% endblock %}
 
-<body>
+{% block conteudo %}
 
-    <h1>Notificação</h1>
-
-    <p>
-        <strong>Mensagem:</strong>
-        {{ notificacao.mensagem }}
+<div class="mb-4">
+    <p class="text-uppercase small fw-bold mb-2"
+       style="color: #758080; letter-spacing: 1.5px;">
+        CENTRAL DE NOTIFICAÇÕES
     </p>
 
-    <p>
-        <strong>Estudante:</strong>
-        {{ notificacao.estudante }}
+    <h1 class="titulo-pagina mb-2">Detalhes da notificação</h1>
+
+    <p class="text-secondary">
+        Visualize as informações completas desta notificação.
     </p>
+</div>
 
-    {% if notificacao.atividade %}
+<div class="card">
+    <div class="card-body p-4">
 
-        <p>
-            <strong>Atividade:</strong>
-            {{ notificacao.atividade.titulo }}
-        </p>
+        <h4 class="fw-bold mb-3" style="color: #20494A;">
+            {{ notificacao.titulo|default:"Notificação" }}
+        </h4>
 
-        <p>
-            <strong>Data de entrega:</strong>
-            {{ notificacao.atividade.data }}
-        </p>
+        <div class="mb-4">
+            <label class="fw-bold mb-2" style="color: #20494A;">
+                Mensagem
+            </label>
 
-        <p>
-            <strong>Status:</strong>
-            {{ notificacao.atividade.status }}
-        </p>
+            <p class="text-secondary">
+                {{ notificacao.mensagem|default:notificacao }}
+            </p>
+        </div>
 
-    {% endif %}
+        <div class="mb-4">
+            <label class="fw-bold mb-2" style="color: #20494A;">
+                Status
+            </label>
 
-    <a href="{% url 'listar_notificacoes' %}">
-        Voltar para notificações
-    </a>
+            <p>
+                {% if not notificacao.lida %}
+                    <span class="badge rounded-pill px-3 py-2"
+                          style="background-color: #F4E8CC; color: #795A20;">
+                        Não lida
+                    </span>
+                {% else %}
+                    <span class="badge rounded-pill px-3 py-2"
+                          style="background-color: #DDECE5; color: #285B46;">
+                        Lida
+                    </span>
+                {% endif %}
+            </p>
+        </div>
 
-</body>
+        {% if notificacao.data_criacao %}
+        <div class="mb-4">
+            <label class="fw-bold mb-2" style="color: #20494A;">
+                Data de criação
+            </label>
 
-</html>
+            <p class="text-secondary">
+                {{ notificacao.data_criacao|date:"d/m/Y H:i" }}
+            </p>
+        </div>
+        {% endif %}
+
+        <div class="d-flex flex-wrap gap-2 mt-4">
+            <a href="{% url 'notificacao:editar_notificacao' notificacao.pk %}"
+               class="btn btn-primary">
+                Editar
+            </a>
+
+            <a href="{% url 'notificacao:excluir_notificacao' notificacao.pk %}"
+               class="btn btn-outline-danger">
+                Excluir
+            </a>
+
+            <a href="{% url 'notificacao:listar_notificacoes' %}"
+               class="btn btn-outline-secondary">
+                Voltar
+            </a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+```
