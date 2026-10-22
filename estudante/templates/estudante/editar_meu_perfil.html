@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Editar perfil | Beluni{% endblock %}
+
+{% block conteudo %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="mb-4">
+                <span class="text-uppercase small fw-semibold"
+                      style="color: #527575; letter-spacing: 2px;">
+                    BELUNI · MINHA CONTA
+                </span>
+
+                <h1 class="mt-2 fw-bold"
+                    style="color: #20494A; font-family: 'Fraunces', serif;">
+                    Editar perfil
+                </h1>
+
+                <p class="text-secondary">
+                    Atualize suas informações pessoais abaixo.
+                </p>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4 p-md-5">
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        {% for field in form %}
+                            <div class="mb-4">
+                                <label for="{{ field.id_for_label }}"
+                                       class="form-label fw-semibold"
+                                       style="color: #20494A;">
+                                    {{ field.label }}
+                                </label>
+
+                                {% if field.name == 'senha' %}
+                                    <input
+                                        type="password"
+                                        name="{{ field.html_name }}"
+                                        id="{{ field.id_for_label }}"
+                                        class="form-control rounded-3"
+                                        autocomplete="new-password"
+                                    >
+                                {% else %}
+                                    {{ field }}
+                                {% endif %}
+
+                                {% if field.help_text %}
+                                    <div class="form-text">
+                                        {{ field.help_text }}
+                                    </div>
+                                {% endif %}
+
+                                {% for error in field.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-flex flex-wrap gap-2 mt-4">
+                            <button type="submit"
+                                    class="btn rounded-pill px-4 py-2"
+                                    style="background: #20494A; color: white;">
+                                Salvar alterações
+                            </button>
+
+                            <a href="{% url 'meu_perfil' %}"
+                               class="btn btn-outline-secondary rounded-pill px-4 py-2">
+                                Cancelar
+                            </a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

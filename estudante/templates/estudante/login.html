@@ -1,44 +1,95 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Login - Beluni</title>
-</head>
+{% block titulo %}Entrar | Beluni{% endblock %}
 
-<body>
+{% block conteudo %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-5">
 
-    <h1>Login</h1>
+            <div class="text-center mb-4">
+                <h1 class="fw-bold" style="color: #20494A; font-family: 'Fraunces', serif;">
+                    Bem-vindo ao Beluni
+                </h1>
+                <p class="text-secondary">
+                    Organize seus estudos e acompanhe suas metas.
+                </p>
+            </div>
 
-    {% if erro %}
-        <p>{{ erro }}</p>
-    {% endif %}
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4 p-md-5">
 
-    <form method="POST">
+                    <h2 class="h4 fw-bold mb-4" style="color: #20494A;">
+                        Entrar na sua conta
+                    </h2>
 
-        {% csrf_token %}
+                    {% if erro %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ erro }}
+                        </div>
+                    {% endif %}
 
-        <p>
-            <label for="username">Usuário:</label>
-            <input type="text" name="username" id="username" required>
-        </p>
+                    <form method="post">
+                        {% csrf_token %}
 
-        <p>
-            <label for="senha">Senha:</label>
-            <input type="password" name="senha" id="senha" required>
-        </p>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">
+                                Nome de usuário
+                            </label>
+                            <input
+                                type="text"
+                                name="username"
+                                id="username"
+                                class="form-control"
+                                placeholder="Digite seu usuário"
+                                autocomplete="username"
+                                required
+                            >
+                        </div>
 
-        <button type="submit">Entrar</button>
+                        <div class="mb-4">
+                            <label for="senha" class="form-label">
+                                Senha
+                            </label>
+                            <input
+                                type="password"
+                                name="senha"
+                                id="senha"
+                                class="form-control"
+                                placeholder="Digite sua senha"
+                                autocomplete="current-password"
+                                required
+                            >
+                        </div>
 
-    </form>
+                        <button
+                            type="submit"
+                            class="btn w-100 rounded-pill py-2"
+                            style="background: #20494A; color: white;"
+                        >
+                            Entrar
+                        </button>
+                    </form>
 
-    <p>
-        Primeiro acesso?
-        <a href="{% url 'criar_estudante' %}">
-            Cadastre-se
-        </a>
-    </p>
+                    <hr class="my-4">
 
-</body>
+                    <div class="text-center">
+                        <p class="text-secondary mb-2">
+                            Ainda não tem uma conta?
+                        </p>
 
-</html>
+                        <a
+                            href="{% url 'criar_estudante' %}"
+                            class="btn btn-outline-success rounded-pill px-4"
+                        >
+                            Cadastre-se
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

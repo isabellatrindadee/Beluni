@@ -1,4 +1,4 @@
-{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -7,195 +7,142 @@
 
     <title>{% block titulo %}Beluni{% endblock %}</title>
 
+    <!-- Bootstrap -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
     >
 
+    <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
     <style>
         :root {
-            --beluni-petroleo: #20494A;
-            --beluni-petroleo-escuro: #173839;
-            --beluni-areia: #E8DDC8;
-            --beluni-fundo: #F7F5EF;
-            --beluni-branco: #FFFFFF;
-            --beluni-texto: #293B3B;
-            --beluni-secundario: #758080;
-            --beluni-borda: #E5E2D9;
+            --verde: #20494A;
+            --verde-escuro: #173839;
+            --areia: #E8DDC8;
+            --fundo: #F7F5EF;
+            --texto: #293B3B;
+            --texto-suave: #6B7B79;
+            --branco: #FFFFFF;
         }
 
-        body {
-            background-color: var(--beluni-fundo);
-            color: var(--beluni-texto);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-        }
-
-        .navbar {
-            background-color: var(--beluni-petroleo);
-            padding: 14px 0;
-        }
-
-        .navbar-brand {
-            color: var(--beluni-areia);
-            font-family: 'Fraunces', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .navbar-brand:hover {
-            color: var(--beluni-branco);
-        }
-
-        .navbar-toggler {
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .navbar-toggler-icon {
-            filter: brightness(0) invert(1);
-        }
-
-        .menu-link {
-            color: #F7F5EF;
-            text-decoration: none;
-            padding: 9px 13px;
-            border-radius: 8px;
-            display: block;
-            transition: background-color 0.2s;
-        }
-
-        .menu-link:hover {
-            background-color: rgba(255, 255, 255, 0.12);
-            color: var(--beluni-areia);
-        }
-
-        .conteudo {
-            padding: 32px;
-        }
-
-        .titulo-pagina {
-            color: var(--beluni-petroleo);
-            font-family: 'Fraunces', serif;
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 24px;
-        }
-
-        .card {
-            background-color: var(--beluni-branco);
-            border: 1px solid var(--beluni-borda);
-            border-radius: 14px;
-            box-shadow: 0 4px 14px rgba(32, 73, 74, 0.05);
-        }
-
-        .table {
-            color: var(--beluni-texto);
-        }
-
-        .table thead th {
-            background-color: var(--beluni-areia);
-            color: var(--beluni-petroleo-escuro);
-            font-size: 0.78rem;
-            font-weight: 700;
-            padding: 15px 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-
-        .table td {
-            padding: 16px 12px;
-            border-color: var(--beluni-borda);
-        }
-
-        .table-hover tbody tr:hover > * {
-            background-color: #F8F6F0;
-        }
-
-        .btn-primary {
-            background-color: var(--beluni-petroleo);
-            border-color: var(--beluni-petroleo);
-            border-radius: 8px;
-            padding: 9px 16px;
-        }
-
-        .btn-primary:hover,
-        .btn-primary:focus {
-            background-color: var(--beluni-petroleo-escuro);
-            border-color: var(--beluni-petroleo-escuro);
-        }
-
-        .btn-outline-primary {
-            color: var(--beluni-petroleo);
-            border-color: var(--beluni-petroleo);
-            border-radius: 7px;
-        }
-
-        .btn-outline-primary:hover {
-            background-color: var(--beluni-petroleo);
-            border-color: var(--beluni-petroleo);
-        }
-
-        .form-control,
-        .form-select,
-        form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
-        form select,
-        form textarea {
-            display: block;
-            width: 100%;
-            max-width: 100%;
-            border: 1px solid var(--beluni-borda);
-            border-radius: 8px;
-            padding: 10px 12px;
-            background-color: var(--beluni-branco);
-            color: var(--beluni-texto);
-            font-family: 'Inter', sans-serif;
+        * {
             box-sizing: border-box;
         }
 
-        form select[multiple] {
-            min-height: 120px;
+        body {
+            margin: 0;
+            background-color: var(--fundo);
+            color: var(--texto);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
         }
 
-        form label {
-            display: block;
-            margin-bottom: 8px;
+        h1, h2, h3, h4, h5 {
+            font-family: 'Fraunces', serif;
+        }
+
+        .navbar-beluni {
+            background-color: var(--verde);
+            padding: 14px 0;
+        }
+
+        .navbar-beluni .navbar-brand {
+            color: var(--branco);
+            font-family: 'Fraunces', serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-beluni .navbar-brand:hover {
+            color: var(--areia);
+        }
+
+        .navbar-beluni .nav-link {
+            color: rgba(255, 255, 255, 0.88);
+            font-size: 0.94rem;
+            font-weight: 500;
+            padding: 9px 13px;
+            border-radius: 20px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .navbar-beluni .nav-link:hover,
+        .navbar-beluni .nav-link:focus {
+            color: var(--branco);
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .navbar-beluni .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .navbar-beluni .navbar-toggler-icon {
+            filter: brightness(0) invert(1);
+        }
+
+        .btn-beluni {
+            background-color: var(--verde);
+            color: var(--branco);
+            border: 1px solid var(--verde);
+            border-radius: 50px;
+            padding: 10px 22px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .btn-beluni:hover {
+            background-color: var(--verde-escuro);
+            color: var(--branco);
+        }
+
+        .card {
+            border-radius: 18px;
+        }
+
+        .form-control,
+        .form-select {
+            border-color: #D8DFD9;
+            border-radius: 10px;
+            padding: 10px 13px;
         }
 
         .form-control:focus,
-        .form-select:focus,
-        form input:focus,
-        form select:focus,
-        form textarea:focus {
-            border-color: var(--beluni-petroleo);
+        .form-select:focus {
+            border-color: var(--verde);
             box-shadow: 0 0 0 0.2rem rgba(32, 73, 74, 0.12);
-            outline: none;
         }
 
-        .text-secondary {
-            color: var(--beluni-secundario) !important;
+        main {
+            min-height: calc(100vh - 150px);
         }
 
-        @media (max-width: 768px) {
-            .conteudo {
-                padding: 18px 12px;
-            }
-
-            .titulo-pagina {
-                font-size: 1.7rem;
-            }
+        .footer-beluni {
+            padding: 22px 0;
+            margin-top: 35px;
+            text-align: center;
+            color: var(--texto-suave);
+            font-size: 0.85rem;
         }
     </style>
+
+    {% block extra_css %}{% endblock %}
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid px-4">
+
+    <!-- Barra de navegação -->
+    <nav class="navbar navbar-expand-lg navbar-beluni">
+        <div class="container">
+
             <a class="navbar-brand" href="{% url 'listar_atividades' %}">
                 Beluni
             </a>
@@ -213,56 +160,68 @@
             </button>
 
             <div class="collapse navbar-collapse" id="menuBeluni">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+
                     <li class="nav-item">
-                        <a class="menu-link" href="{% url 'listar_atividades' %}">
+                        <a class="nav-link" href="{% url 'listar_atividades' %}">
                             Atividades
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="menu-link" href="{% url 'listar_disciplinas' %}">
+                        <a class="nav-link" href="{% url 'listar_disciplinas' %}">
                             Disciplinas
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="menu-link" href="{% url 'listar_metas' %}">
+                        <a class="nav-link" href="{% url 'listar_metas' %}">
                             Metas
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="menu-link" href="{% url 'notificacao:listar_notificacoes' %}">
-                            Notificações
+                        <a class="nav-link" href="{% url 'meu_perfil' %}">
+                            Meu perfil
                         </a>
                     </li>
+
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout_estudante' %}">
+                                Sair
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login_estudante' %}">
+                                Entrar
+                            </a>
+                        </li>
+                    {% endif %}
+
                 </ul>
             </div>
         </div>
     </nav>
 
-    <main class="container-fluid conteudo">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show"
-                     role="alert">
-                    {{ message }}
-
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert"
-                        aria-label="Fechar">
-                    </button>
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        {% block conteudo %}
-        {% endblock %}
+    <!-- Conteúdo das páginas -->
+    <main>
+        {% block conteudo %}{% endblock %}
     </main>
 
+    <!-- Rodapé -->
+    <footer class="footer-beluni">
+        <div class="container">
+            <p class="mb-0">
+                Beluni · Organize seus estudos, acompanhe suas metas.
+            </p>
+        </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    {% block extra_js %}{% endblock %}
+
 </body>
 </html>

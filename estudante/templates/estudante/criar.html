@@ -1,23 +1,85 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Cadastrar Estudante</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h1>Cadastrar Estudante</h1>
+{% block titulo %}Criar conta | Beluni{% endblock %}
 
-    <form method="POST">
-        {% csrf_token %}
+{% block conteudo %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
 
-        {{ form.as_p }}
+            <div class="text-center mb-4">
+                <span class="small text-uppercase fw-semibold"
+                      style="color:#527575; letter-spacing:2px;">
+                    BELUNI · NOVA CONTA
+                </span>
 
-        <button type="submit">Cadastrar</button>
-    </form>
+                <h1 class="fw-bold mt-2"
+                    style="color:#20494A; font-family:'Fraunces',serif;">
+                    Crie sua conta
+                </h1>
 
-    <a href="{% url 'listar_estudantes' %}">
-        Voltar para estudantes
-    </a>
+                <p class="text-secondary">
+                    Preencha seus dados para começar a organizar seus estudos.
+                </p>
+            </div>
 
-</body>
-</html>
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4 p-md-5">
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}"
+                                       class="form-label fw-semibold"
+                                       style="color:#20494A;">
+                                    {{ field.label }}
+                                </label>
+
+                                {{ field }}
+
+                                {% if field.help_text %}
+                                    <div class="form-text">
+                                        {{ field.help_text }}
+                                    </div>
+                                {% endif %}
+
+                                {% for error in field.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+
+                        <button type="submit"
+                                class="btn w-100 rounded-pill py-2 mt-3"
+                                style="background:#20494A;color:white;">
+                            Criar minha conta
+                        </button>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <p class="text-center text-secondary mb-0">
+                        Já tem uma conta?
+                        <a href="{% url 'login_estudante' %}"
+                           class="fw-semibold text-decoration-none"
+                           style="color:#20494A;">
+                            Entrar
+                        </a>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

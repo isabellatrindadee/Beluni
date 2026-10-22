@@ -1,28 +1,67 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Estudantes</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h1>Estudantes</h1>
+{% block titulo %}Estudantes | Beluni{% endblock %}
 
-    <a href="{% url 'criar_estudante' %}">Cadastrar estudante</a>
+{% block conteudo %}
+<div class="container py-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <span class="small text-uppercase fw-semibold" style="color:#527575;letter-spacing:2px;">
+                BELUNI · GESTÃO
+            </span>
+            <h1 class="fw-bold mt-2" style="color:#20494A;font-family:'Fraunces',serif;">
+                Estudantes
+            </h1>
+            <p class="text-secondary mb-0">Gerencie os cadastros de estudantes.</p>
+        </div>
 
-    <ul>
-        {% for estudante in estudantes %}
-            <li>
-                {{ estudante.nome }}
-                - CPF: {{ estudante.cpf }}
+        <a href="{% url 'criar_estudante' %}" class="btn rounded-pill px-4"
+           style="background:#20494A;color:white;">
+            + Novo estudante
+        </a>
+    </div>
 
-                <a href="{% url 'detalhar_estudante' estudante.id %}">
-                    Ver detalhes
-                </a>
-            </li>
-        {% empty %}
-            <li>Nenhum estudante cadastrado.</li>
-        {% endfor %}
-    </ul>
-
-</body>
-</html>
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-0">
+            {% if estudantes %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead style="background:#F7F5EF;">
+                            <tr>
+                                <th class="p-3">Nome</th>
+                                <th>Usuário</th>
+                                <th>CPF</th>
+                                <th class="text-end p-3">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for estudante in estudantes %}
+                                <tr>
+                                    <td class="p-3 fw-semibold">{{ estudante.nome }}</td>
+                                    <td>{{ estudante.username }}</td>
+                                    <td>{{ estudante.cpf }}</td>
+                                    <td class="text-end p-3">
+                                        <a href="{% url 'detalhar_estudante' estudante.id %}"
+                                           class="btn btn-sm btn-outline-secondary rounded-pill">Ver</a>
+                                        <a href="{% url 'editar_estudante' estudante.id %}"
+                                           class="btn btn-sm btn-outline-success rounded-pill">Editar</a>
+                                        <a href="{% url 'excluir_estudante' estudante.id %}"
+                                           class="btn btn-sm btn-outline-danger rounded-pill">Excluir</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5 px-3">
+                    <h5 style="color:#20494A;">Nenhum estudante cadastrado</h5>
+                    <p class="text-secondary">Cadastre o primeiro estudante para começar.</p>
+                    <a href="{% url 'criar_estudante' %}" class="btn rounded-pill px-4"
+                       style="background:#20494A;color:white;">Cadastrar estudante</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
