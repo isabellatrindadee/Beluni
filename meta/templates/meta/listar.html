@@ -1,44 +1,146 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Metas</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h1>Metas</h1>
+{% block titulo %}Minhas metas | Beluni{% endblock %}
 
-    <a href="{% url 'criar_meta' %}">Criar meta</a>
+{% block conteudo %}
+<div class="container py-4">
 
-    <ul>
-        {% for meta in metas %}
-            <li>
-                <strong>{{ meta.titulo }}</strong><br>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <p class="text-uppercase small fw-semibold mb-1" style="color: #568779;">
+                MEU PLANEJAMENTO
+            </p>
+            <h1 class="fw-bold mb-1" style="color: #20494A;">
+                Minhas metas
+            </h1>
+            <p class="text-secondary mb-0">
+                Cada pequeno passo conta. Acompanhe suas conquistas!
+            </p>
+        </div>
 
-                Descrição: {{ meta.descricao }}<br>
+        <a href="{% url 'criar_meta' %}" class="btn btn-primary rounded-pill">
+            + Nova meta
+        </a>
+    </div>
 
-                Data: {{ meta.data }}<br>
+    <div class="card mb-4">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fw-semibold">Meu checklist</span>
+                <span class="text-secondary small">
+                    {{ metas|length }} meta(s)
+                </span>
+            </div>
 
-                Estudante: {{ meta.estudante.nome }}<br>
+            <p class="text-secondary small mb-0">
+                Marque a caixa ao concluir um objetivo.
+            </p>
+        </div>
+    </div>
 
-                <a href="{% url 'detalhar_meta' meta.id %}">
-                    Detalhes
+    {% for meta in metas %}
+        <div class="card mb-3 {% if meta.concluida %}meta-concluida{% endif %}">
+            <div class="card-body p-3 p-md-4">
+                <div class="d-flex align-items-start gap-3">
+
+                    <form method="post"
+                          action="{% url 'alternar_meta' meta.id %}"
+                          class="pt-1">
+                        {% csrf_token %}
+                        <input
+                            type="checkbox"
+                            class="form-check-input meta-checkbox"
+                            aria-label="Concluir {{ meta.titulo }}"
+                            {% if meta.concluida %}checked{% endif %}
+                            onchange="this.form.submit()">
+                    </form>
+
+                    <div class="flex-grow-1">
+                        <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+                            <h5 class="fw-bold mb-2 meta-titulo">
+                                {{ meta.titulo }}
+                            </h5>
+
+                            {% if meta.concluida %}
+                                <span class="badge rounded-pill text-bg-success">
+                                    Concluída
+                                </span>
+                            {% else %}
+                                <span class="badge rounded-pill"
+                                      style="background-color: #F5EBD5; color: #725B2E;">
+                                    Em andamento
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <p class="text-secondary mb-3 meta-descricao">
+                            {{ meta.detalhamento }}
+                        </p>
+
+                        <p class="small text-secondary mb-3">
+                            <strong>Data:</strong> {{ meta.data|date:"d/m/Y" }}
+                            <span class="mx-2">•</span>
+                            <strong>Estudante:</strong> {{ meta.estudante }}
+                        </p>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{% url 'detalhar_meta' meta.id %}"
+                               class="btn btn-sm btn-outline-primary">
+                                Ver detalhes
+                            </a>
+
+                            <a href="{% url 'editar_meta' meta.id %}"
+                               class="btn btn-sm btn-outline-secondary">
+                                Editar
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="card">
+            <div class="card-body text-center py-5 px-4">
+                <div style="font-size: 3rem;">🌱</div>
+
+                <h4 class="fw-bold mt-3" style="color: #20494A;">
+                    Você ainda não tem metas!
+                </h4>
+
+                <p class="text-secondary mb-4">
+                    Comece criando seu primeiro objetivo.
+                    Ele aparecerá aqui para você acompanhar em formato de checklist.
+                </p>
+
+                <a href="{% url 'criar_meta' %}" class="btn btn-primary">
+                    + Criar minha primeira meta
                 </a>
+            </div>
+        </div>
+    {% endfor %}
 
-                <a href="{% url 'editar_meta' meta.id %}">
-                    Editar
-                </a>
+</div>
 
-                <a href="{% url 'excluir_meta' meta.id %}">
-                    Excluir
-                </a>
-            </li>
+<style>
+    .meta-checkbox {
+        width: 1.35rem;
+        height: 1.35rem;
+        cursor: pointer;
+        accent-color: #20494A;
+    }
 
-            <br>
+    .meta-concluida {
+        background-color: #F4F8F4;
+    }
 
-        {% empty %}
-            <li>Nenhuma meta cadastrada.</li>
-        {% endfor %}
-    </ul>
+    .meta-concluida .meta-titulo {
+        text-decoration: line-through;
+        color: #758080;
+    }
 
-</body>
-</html>
+    .meta-concluida .meta-descricao {
+        opacity: 0.7;
+    }
+</style>
+{% endblock %}

@@ -8,7 +8,7 @@ from .forms import MetaForm
 @login_required
 @permission_required('meta.view_meta')
 def listar_metas(request):
-    metas = Meta.objects.all()
+    metas = Meta.objects.select_related('estudante').order_by('data')
 
     return render(
         request,
@@ -86,3 +86,14 @@ def excluir_meta(request, id):
         'meta/excluir.html',
         {'meta': meta}
     )
+
+
+@login_required
+@permission_required('meta.change_meta')
+def alternar_meta(request, id):
+    if request.method == 'POST':
+        meta = get_object_or_404(Meta, id=id)
+        meta.concluida = not meta.concluida
+        meta.save(update_fields=['concluida'])
+
+    return redirect('listar_metas')

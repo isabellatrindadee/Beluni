@@ -7,4 +7,5 @@ urlpatterns = [
     path('<int:id>/', views.detalhar_meta, name='detalhar_meta'),
     path('<int:id>/editar/', views.editar_meta, name='editar_meta'),
     path('<int:id>/excluir/', views.excluir_meta, name='excluir_meta'),
+    path('<int:id>/alternar/', views.alternar_meta, name='alternar_meta'),
 ]

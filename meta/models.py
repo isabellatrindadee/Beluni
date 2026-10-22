@@ -6,11 +6,14 @@ class Meta(models.Model):
     titulo = models.CharField(max_length=100)
     detalhamento = models.CharField(max_length=255)
     data = models.DateField()
+
     estudante = models.ForeignKey(
         Estudante,
         on_delete=models.CASCADE,
         related_name="metas"
     )
+
+    concluida = models.BooleanField(default=False)
 
     def __str__(self):
         return self.titulo

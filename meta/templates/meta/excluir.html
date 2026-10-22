@@ -1,23 +1,62 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Excluir Meta</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h1>Excluir Meta</h1>
+{% block titulo %}Excluir meta | Beluni{% endblock %}
 
-    <p>
-        Tem certeza que deseja excluir "{{ meta.titulo }}"?
-    </p>
+{% block conteudo %}
+<div class="container py-4" style="max-width: 700px;">
 
-    <form method="POST">
-        {% csrf_token %}
+    <div class="mb-4">
+        <a href="{% url 'detalhar_meta' meta.id %}"
+           class="text-decoration-none text-secondary">
+            ← Voltar para os detalhes
+        </a>
+    </div>
 
-        <button type="submit">Excluir</button>
-    </form>
+    <div class="card border-danger">
+        <div class="card-body p-4 p-md-5 text-center">
 
-    <a href="{% url 'listar_metas' %}">Cancelar</a>
+            <div class="mb-3" style="font-size: 3rem;">⚠️</div>
 
-</body>
-</html>
+            <h1 class="h3 fw-bold mb-3" style="color: #20494A;">
+                Excluir esta meta?
+            </h1>
+
+            <p class="text-secondary">
+                Você está prestes a excluir a meta
+                <strong>{{ meta.titulo }}</strong>.
+            </p>
+
+            <p class="text-secondary mb-4">
+                Essa ação é permanente e não poderá ser desfeita.
+            </p>
+
+            <div class="p-3 rounded-3 text-start mb-4"
+                 style="background-color: #F7F5EF;">
+                <p class="fw-semibold mb-1">{{ meta.titulo }}</p>
+                <p class="small text-secondary mb-1">
+                    {{ meta.detalhamento }}
+                </p>
+                <p class="small text-secondary mb-0">
+                    Data: {{ meta.data|date:"d/m/Y" }}
+                </p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <button type="submit" class="btn btn-danger">
+                        Sim, excluir meta
+                    </button>
+
+                    <a href="{% url 'detalhar_meta' meta.id %}"
+                       class="btn btn-outline-secondary">
+                        Não, voltar
+                    </a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

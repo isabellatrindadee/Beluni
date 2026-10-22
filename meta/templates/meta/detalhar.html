@@ -1,23 +1,96 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ meta.titulo }}</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h1>{{ meta.titulo }}</h1>
+{% block titulo %}Detalhes da meta | Beluni{% endblock %}
 
-    <p>Descrição: {{ meta.descricao }}</p>
+{% block conteudo %}
+<div class="container py-4" style="max-width: 850px;">
 
-    <p>Data: {{ meta.data }}</p>
+    <div class="mb-4">
+        <a href="{% url 'listar_metas' %}"
+           class="text-decoration-none text-secondary">
+            ← Voltar para minhas metas
+        </a>
+    </div>
 
-    <p>Estudante: {{ meta.estudante.nome }}</p>
+    <div class="mb-4">
+        <p class="text-uppercase small fw-semibold mb-1" style="color: #568779;">
+            MEU PLANEJAMENTO
+        </p>
+        <h1 class="titulo-pagina mb-2">Detalhes da meta</h1>
+    </div>
 
-    <a href="{% url 'editar_meta' meta.id %}">Editar</a>
+    <div class="card">
+        <div class="card-body p-4 p-md-5">
 
-    <a href="{% url 'excluir_meta' meta.id %}">Excluir</a>
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+                <div>
+                    <h2 class="h3 fw-bold mb-2" style="color: #20494A;">
+                        {{ meta.titulo }}
+                    </h2>
+                    <p class="text-secondary mb-0">
+                        Objetivo cadastrado no Beluni
+                    </p>
+                </div>
 
-    <a href="{% url 'listar_metas' %}">Voltar</a>
+                {% if meta.concluida %}
+                    <span class="badge rounded-pill text-bg-success px-3 py-2">
+                        ✓ Concluída
+                    </span>
+                {% else %}
+                    <span class="badge rounded-pill px-3 py-2"
+                          style="background-color: #F5EBD5; color: #725B2E;">
+                        Em andamento
+                    </span>
+                {% endif %}
+            </div>
 
-</body>
-</html>
+            <hr>
+
+            <div class="mb-4">
+                <h6 class="fw-bold">Descrição</h6>
+                <p class="text-secondary mb-0">
+                    {{ meta.detalhamento|default:"Nenhuma descrição informada." }}
+                </p>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <div class="p-3 rounded-3 h-100" style="background-color: #F7F5EF;">
+                        <p class="small text-secondary mb-1">Data da meta</p>
+                        <p class="fw-semibold mb-0">
+                            {{ meta.data|date:"d/m/Y" }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="p-3 rounded-3 h-100" style="background-color: #F7F5EF;">
+                        <p class="small text-secondary mb-1">Estudante responsável</p>
+                        <p class="fw-semibold mb-0">
+                            {{ meta.estudante }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-4 pt-3">
+                <a href="{% url 'editar_meta' meta.id %}"
+                   class="btn btn-primary">
+                    Editar meta
+                </a>
+
+                <a href="{% url 'excluir_meta' meta.id %}"
+                   class="btn btn-outline-danger">
+                    Excluir meta
+                </a>
+
+                <a href="{% url 'listar_metas' %}"
+                   class="btn btn-outline-secondary">
+                    Voltar
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
