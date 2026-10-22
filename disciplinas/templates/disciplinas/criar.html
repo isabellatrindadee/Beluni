@@ -1,21 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Criar Disciplina</title>
-</head>
-<body>
 
-    <h1>Criar Disciplina</h1>
+{% extends 'base.html' %}
 
-    <form method="POST">
-        {% csrf_token %}
+{% block titulo %}Nova disciplina | Beluni{% endblock %}
 
-        {{ form.as_p }}
+{% block conteudo %}
+<div class="container py-4" style="max-width: 760px;">
+    <a href="{% url 'listar_disciplinas' %}"
+       class="btn btn-outline-primary mb-4">
+        ← Voltar para disciplinas
+    </a>
 
-        <button type="submit">Criar</button>
-    </form>
+    <div class="card border-0 shadow-sm"
+         style="border-radius: 16px; background-color: #FFFFFF;">
+        <div class="card-body p-4 p-md-5">
+            <h1 class="fw-bold mb-2" style="color: #20494A;">
+                Nova disciplina
+            </h1>
+            <p class="mb-4" style="color: #758080;">
+                Preencha os dados para cadastrar uma disciplina.
+            </p>
 
-    <a href="{% url 'listar_disciplinas' %}">Voltar</a>
+            <form method="post">
+                {% csrf_token %}
 
-</body>
-</html>
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}"
+                               class="form-label fw-semibold"
+                               style="color: #293B3B;">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                        {% if field.help_text %}
+                            <div class="form-text">{{ field.help_text }}</div>
+                        {% endif %}
+
+                        {% for error in field.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <button type="submit"
+                            class="btn text-white px-4"
+                            style="background-color: #20494A;">
+                        Salvar disciplina
+                    </button>
+
+                    <a href="{% url 'listar_disciplinas' %}"
+                       class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

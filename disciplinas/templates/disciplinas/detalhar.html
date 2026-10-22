@@ -1,35 +1,171 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ disciplina.NomeDisciplina }}</title>
-</head>
-<body>
 
-    <h1>{{ disciplina.NomeDisciplina }}</h1>
+{% extends 'base.html' %}
 
-    <p>
-        <strong>Nome da disciplina:</strong>
-        {{ disciplina.NomeDisciplina }}
-    </p>
+{% block titulo %}{{ disciplina.nomedisciplina }} | Beluni{% endblock %}
 
-    <p>
-        <strong>Estudante:</strong>
-        {{ disciplina.estudante.nome }}
-    </p>
+{% block conteudo %}
+<div class="container py-4">
 
-    <a href="{% url 'editar_disciplina' disciplina.id %}">
-        Editar
+    <!-- Voltar -->
+    <a href="{% url 'listar_disciplinas' %}"
+       class="btn btn-outline-primary mb-4">
+        ← Voltar para disciplinas
     </a>
 
-    <a href="{% url 'excluir_disciplina' disciplina.id %}">
-        Excluir
-    </a>
+    <!-- Cabeçalho da disciplina -->
+    <div class="p-4 p-md-5 rounded-4 mb-4"
+         style="background-color: #20494A; color: white;">
 
-    <br><br>
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <p class="mb-2 opacity-75">Minha disciplina</p>
 
-    <a href="{% url 'listar_disciplinas' %}">
-        Voltar para disciplinas
-    </a>
+                <h1 class="fw-bold mb-2">
+                    {{ disciplina.nomedisciplina }}
+                </h1>
 
-</body>
-</html>
+                <p class="mb-0 opacity-75">
+                    Acompanhe as atividades, orientações e prazos desta disciplina.
+                </p>
+            </div>
+
+            <div style="font-size: 52px;">📚</div>
+        </div>
+    </div>
+
+    <!-- Informações da disciplina -->
+    <div class="card border-0 shadow-sm mb-4"
+         style="border-radius: 16px;">
+
+        <div class="card-body p-4">
+            <h2 class="h5 fw-bold mb-3" style="color: #20494A;">
+                Sobre a disciplina
+            </h2>
+
+            <p class="mb-1" style="color: #758080;">
+                <strong>Estudante:</strong>
+                {{ disciplina.estudante }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Cabeçalho das atividades -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+        <div>
+            <h2 class="h4 fw-bold mb-1" style="color: #20494A;">
+                Atividades
+            </h2>
+
+            <p class="mb-0" style="color: #758080;">
+                Veja as tarefas relacionadas a esta disciplina.
+            </p>
+        </div>
+
+        <a href="{% url 'criar_atividade_disciplina' disciplina.id %}"
+           class="btn text-white px-4 py-2"
+           style="background-color: #20494A; border-radius: 10px;">
+            + Nova atividade
+        </a>
+    </div>
+
+    <!-- Lista de atividades -->
+    {% if atividades %}
+        <div class="row g-3">
+
+            {% for atividade in atividades %}
+                <div class="col-12">
+
+                    <div class="card border-0 shadow-sm"
+                         style="border-radius: 14px;">
+
+                        <div class="card-body p-4">
+
+                            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+
+                                <div class="flex-grow-1">
+
+                                    <h3 class="h5 fw-bold mb-2"
+                                        style="color: #20494A;">
+                                        {{ atividade.titulo }}
+                                    </h3>
+
+                                    <p class="mb-2" style="color: #758080;">
+                                        <icon name="calendar" inline size="sm" />
+                                        Prazo:
+                                        {% if atividade.data %}
+                                            {{ atividade.data|date:"d/m/Y" }}
+                                        {% else %}
+                                            Não informado
+                                        {% endif %}
+                                    </p>
+
+                                    {% if atividade.detalhamento_atividade %}
+                                        <p class="mb-3">
+                                            {{ atividade.detalhamento_atividade|truncatewords:25 }}
+                                        </p>
+                                    {% endif %}
+
+                                    <div class="d-flex flex-wrap gap-2">
+
+                                        <span class="badge rounded-pill"
+                                              style="background-color: #E8DDC8; color: #20494A;">
+                                            {{ atividade.get_status_display }}
+                                        </span>
+
+                                        <span class="badge rounded-pill bg-light text-dark">
+                                            Prioridade: {{ atividade.get_prioridade_display }}
+                                        </span>
+
+                                        {% if atividade.pontuacao %}
+                                            <span class="badge rounded-pill bg-light text-dark">
+                                                Pontuação: {{ atividade.pontuacao }}
+                                            </span>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <a href="{% url 'detalhar_atividade' atividade.id %}"
+                                       class="btn btn-outline-primary">
+                                        Ver atividade →
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <!-- Estado vazio -->
+        <div class="text-center p-5 rounded-4"
+             style="background-color: #FFFFFF; border: 1px dashed #D5D0C4;">
+
+            <div style="font-size: 44px;">📝</div>
+
+            <h3 class="h5 fw-bold mt-3" style="color: #20494A;">
+                Nenhuma atividade por aqui ainda
+            </h3>
+
+            <p class="mb-4" style="color: #758080;">
+                Cadastre a primeira atividade desta disciplina para começar a organizar seus estudos.
+            </p>
+
+            <a href="{% url 'criar_atividade_disciplina' disciplina.id %}"
+               class="btn text-white px-4"
+               style="background-color: #20494A;">
+                + Criar primeira atividade
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+{% endblock %}

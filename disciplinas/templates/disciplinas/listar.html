@@ -1,35 +1,82 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Disciplinas</title>
-</head>
-<body>
 
-    <h1>Minhas Disciplinas</h1>
+{% extends 'base.html' %}
 
-    <a href="{% url 'criar_disciplina' %}">Criar disciplina</a>
+{% block titulo %}Minhas disciplinas | Beluni{% endblock %}
 
-    <ul>
-        {% for disciplina in disciplinas %}
-            <li>
-                {{ disciplina.NomeDisciplina }}
+{% block conteudo %}
+<div class="container py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h1 class="fw-bold mb-1" style="color: #20494A;">Minhas disciplinas</h1>
+            <p class="mb-0" style="color: #758080;">
+                Organize suas disciplinas em um só lugar.
+            </p>
+        </div>
 
-                <a href="{% url 'detalhar_disciplina' disciplina.id %}">
-                    Visualizar
-                </a>
+        <a href="{% url 'criar_disciplina' %}"
+           class="btn text-white px-4 py-2"
+           style="background-color: #20494A; border-radius: 10px;">
+            + Nova disciplina
+        </a>
+    </div>
 
-                <a href="{% url 'editar_disciplina' disciplina.id %}">
-                    Editar
-                </a>
+    {% if disciplinas %}
+        <div class="row g-3">
+            {% for disciplina in disciplinas %}
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm"
+                         style="background-color: #FFFFFF; border-radius: 16px;">
+                        <div class="card-body p-4">
+                            <div class="rounded-3 d-flex align-items-center justify-content-center mb-3"
+                                 style="width: 48px; height: 48px; background-color: #E8DDC8;">
+                                <span style="font-size: 24px;">📚</span>
+                            </div>
 
-                <a href="{% url 'excluir_disciplina' disciplina.id %}">
-                    Excluir
-                </a>
-            </li>
-        {% empty %}
-            <li>Nenhuma disciplina cadastrada.</li>
-        {% endfor %}
-    </ul>
+                            <h5 class="fw-bold mb-2" style="color: #20494A;">
+                                {{ disciplina.nomedisciplina }}
+                            </h5>
 
-</body>
-</html>
+                            <p class="small mb-3" style="color: #758080;">
+                                Estudante: {{ disciplina.estudante }}
+                            </p>
+
+                            <div class="d-flex flex-wrap gap-2">
+                                <a href="{% url 'detalhar_disciplina' disciplina.id %}"
+                                   class="btn btn-sm btn-outline-secondary">
+                                    Detalhes
+                                </a>
+
+                                <a href="{% url 'editar_disciplina' disciplina.id %}"
+                                   class="btn btn-sm btn-outline-primary">
+                                    Editar
+                                </a>
+
+                                <a href="{% url 'excluir_disciplina' disciplina.id %}"
+                                   class="btn btn-sm btn-outline-danger">
+                                    Excluir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center p-5 rounded-4"
+             style="background-color: #FFFFFF; border: 1px dashed #D5D0C4;">
+            <div style="font-size: 42px;">📖</div>
+            <h5 class="fw-bold mt-3" style="color: #20494A;">
+                Nenhuma disciplina cadastrada
+            </h5>
+            <p style="color: #758080;">
+                Cadastre sua primeira disciplina para começar a organizar seus estudos.
+            </p>
+            <a href="{% url 'criar_disciplina' %}"
+               class="btn text-white mt-2"
+               style="background-color: #20494A;">
+                Cadastrar disciplina
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

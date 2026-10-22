@@ -20,9 +20,18 @@ def listar_atividades(request):
     )
 
 
+
 @login_required
 @permission_required('atividade.add_atividade')
-def criar_atividade(request):
+def criar_atividade(request, disciplina_id=None):
+    disciplina_inicial = None
+
+    if disciplina_id is not None:
+        disciplina_inicial = get_object_or_404(
+            Disciplina,
+            id=disciplina_id
+        )
+
     if request.method == 'POST':
         form = AtividadeForm(request.POST)
         formset = AtividadeInterdisciplinarFormSet(
@@ -37,9 +46,13 @@ def criar_atividade(request):
             return redirect('listar_atividades')
     else:
         form = AtividadeForm()
+
         formset = AtividadeInterdisciplinarFormSet(
             prefix='disciplinas'
         )
+
+        if disciplina_inicial is not None:
+            formset.forms[0].initial['disciplina'] = disciplina_inicial
 
     return render(
         request,
@@ -47,9 +60,9 @@ def criar_atividade(request):
         {
             'form': form,
             'formset': formset,
+            'disciplina_inicial': disciplina_inicial,
         }
     )
-
 
 @login_required
 @permission_required('atividade.view_atividade')

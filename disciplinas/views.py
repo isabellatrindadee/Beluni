@@ -36,15 +36,24 @@ def criar_disciplina(request):
     )
 
 
+
 @login_required
 @permission_required('disciplinas.view_disciplina')
 def detalhar_disciplina(request, id):
-    disciplina = get_object_or_404(Disciplina, id=id)
+    disciplina = get_object_or_404(
+        Disciplina.objects.prefetch_related('atividades'),
+        id=id
+    )
+
+    atividades = disciplina.atividades.all().order_by('data')
 
     return render(
         request,
         'disciplinas/detalhar.html',
-        {'disciplina': disciplina}
+        {
+            'disciplina': disciplina,
+            'atividades': atividades,
+        }
     )
 
 

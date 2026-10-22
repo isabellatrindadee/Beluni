@@ -1,28 +1,44 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Excluir Disciplina</title>
-</head>
-<body>
+ 
+{% extends 'base.html' %}
 
-    <h1>Excluir Disciplina</h1>
+{% block titulo %}Excluir disciplina | Beluni{% endblock %}
 
-    <p>
-        Tem certeza que deseja excluir a disciplina
-        <strong>{{ disciplina.NomeDisciplina }}</strong>?
-    </p>
+{% block conteudo %}
+<div class="container py-5" style="max-width: 650px;">
+    <div class="card border-0 shadow-sm"
+         style="border-radius: 16px;">
+        <div class="card-body p-4 p-md-5 text-center">
+            <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+                 style="width: 64px; height: 64px; background-color: #F8D7DA;">
+                <span style="font-size: 30px;">⚠️</span>
+            </div>
 
-    <form method="POST">
-        {% csrf_token %}
+            <h1 class="h3 fw-bold mb-3" style="color: #20494A;">
+                Excluir disciplina?
+            </h1>
 
-        <button type="submit">Sim, excluir</button>
-    </form>
+            <p style="color: #758080;">
+                Tem certeza de que deseja excluir a disciplina
+                <strong>{{ disciplina.nomedisciplina }}</strong>?
+            </p>
 
-    <br>
+            <p class="small text-danger">
+                Essa ação não pode ser desfeita.
+            </p>
 
-    <a href="{% url 'detalhar_disciplina' disciplina.id %}">
-        Cancelar
-    </a>
+            <form method="post" class="d-flex flex-wrap justify-content-center gap-2 mt-4">
+                {% csrf_token %}
 
-</body>
-</html>
+                <button type="submit" class="btn btn-danger px-4">
+                    Sim, excluir
+                </button>
+
+                <a href="{% url 'detalhar_disciplina' disciplina.id %}"
+                   class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
