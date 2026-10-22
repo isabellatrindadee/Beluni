@@ -1,15 +1,25 @@
-
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
 
 from .models import Estudante
-from .forms import EstudanteForm, PerfilEstudanteForm, CadastroEstudanteForm
+from .forms import (
+    EstudanteForm,
+    PerfilEstudanteForm,
+    CadastroEstudanteForm,
+)
 
 
+# Verifica se o usuário pertence ao grupo administrador
+def usuario_e_administrador(user):
+    return (
+        user.is_authenticated
+        and user.groups.filter(name='administrador').exists()
+    )
+
+
+# LOGIN
 def login_estudante(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -32,16 +42,15 @@ def login_estudante(request):
     return render(request, 'estudante/login.html')
 
 
+# LOGOUT
 @login_required
 def logout_estudante(request):
     logout(request)
     return redirect('login_estudante')
 
 
+# CADASTRO DE ESTUDANTE
 def criar_estudante(request):
-    """
-    Cadastro público: qualquer pessoa pode criar uma conta.
-    """
     if request.method == 'POST':
         form = CadastroEstudanteForm(request.POST)
 
@@ -54,7 +63,9 @@ def criar_estudante(request):
                 request,
                 'Conta criada com sucesso! Agora você pode entrar.'
             )
+
             return redirect('login_estudante')
+
     else:
         form = CadastroEstudanteForm()
 
@@ -63,24 +74,40 @@ def criar_estudante(request):
     })
 
 
+# LISTAGEM DE ESTUDANTES — SOMENTE ADMINISTRADORES
 @login_required
+@user_passes_test(
+    usuario_e_administrador,
+    login_url='login_estudante'
+)
 def listar_estudantes(request):
     estudantes = Estudante.objects.all()
+
     return render(request, 'estudante/listar.html', {
         'estudantes': estudantes
     })
 
 
+# DETALHES DE UM ESTUDANTE — SOMENTE ADMINISTRADORES
 @login_required
+@user_passes_test(
+    usuario_e_administrador,
+    login_url='login_estudante'
+)
 def detalhar_estudante(request, id):
     estudante = get_object_or_404(Estudante, pk=id)
+
     return render(request, 'estudante/detalhar.html', {
         'estudante': estudante
     })
 
 
+# EDITAR ESTUDANTE — SOMENTE ADMINISTRADORES
 @login_required
-@permission_required('estudante.change_estudante', raise_exception=True)
+@user_passes_test(
+    usuario_e_administrador,
+    login_url='login_estudante'
+)
 def editar_estudante(request, id):
     estudante = get_object_or_404(Estudante, pk=id)
 
@@ -95,8 +122,17 @@ def editar_estudante(request, id):
                 estudante.set_password(senha)
 
             estudante.save()
-            messages.success(request, 'Estudante atualizado com sucesso!')
-            return redirect('detalhar_estudante', id=estudante.pk)
+
+            messages.success(
+                request,
+                'Estudante atualizado com sucesso!'
+            )
+
+            return redirect(
+                'detalhar_estudante',
+                id=estudante.pk
+            )
+
     else:
         form = EstudanteForm(instance=estudante)
 
@@ -106,14 +142,23 @@ def editar_estudante(request, id):
     })
 
 
+# EXCLUIR ESTUDANTE — SOMENTE ADMINISTRADORES
 @login_required
-@permission_required('estudante.delete_estudante', raise_exception=True)
+@user_passes_test(
+    usuario_e_administrador,
+    login_url='login_estudante'
+)
 def excluir_estudante(request, id):
     estudante = get_object_or_404(Estudante, pk=id)
 
     if request.method == 'POST':
         estudante.delete()
-        messages.success(request, 'Estudante excluído com sucesso!')
+
+        messages.success(
+            request,
+            'Estudante excluído com sucesso!'
+        )
+
         return redirect('listar_estudantes')
 
     return render(request, 'estudante/excluir.html', {
@@ -121,10 +166,12 @@ def excluir_estudante(request, id):
     })
 
 
-
+# MEU PERFIL
 @login_required
 def meu_perfil(request):
-    estudante = Estudante.objects.filter(pk=request.user.pk).first()
+    estudante = Estudante.objects.filter(
+        pk=request.user.pk
+    ).first()
 
     if estudante is None:
         messages.warning(
@@ -137,12 +184,20 @@ def meu_perfil(request):
         'estudante': estudante
     })
 
+
+# EDITAR MEU PERFIL
 @login_required
 def editar_meu_perfil(request):
-    estudante = get_object_or_404(
-        Estudante,
+    estudante = Estudante.objects.filter(
         pk=request.user.pk
-    )
+    ).first()
+
+    if estudante is None:
+        messages.warning(
+            request,
+            'Seu usuário ainda não possui um perfil de estudante cadastrado.'
+        )
+        return redirect('criar_estudante')
 
     if request.method == 'POST':
         form = PerfilEstudanteForm(
@@ -162,8 +217,13 @@ def editar_meu_perfil(request):
             if senha:
                 update_session_auth_hash(request, estudante)
 
-            messages.success(request, 'Seu perfil foi atualizado com sucesso!')
+            messages.success(
+                request,
+                'Seu perfil foi atualizado com sucesso!'
+            )
+
             return redirect('meu_perfil')
+
     else:
         form = PerfilEstudanteForm(instance=estudante)
 

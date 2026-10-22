@@ -1,23 +1,113 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Editar Estudante</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h1>Editar Estudante</h1>
+{% block titulo %}Editar estudante | Beluni{% endblock %}
 
-    <form method="POST">
-        {% csrf_token %}
+{% block conteudo %}
+<div class="container py-5" style="max-width: 850px;">
 
-        {{ form.as_p }}
+    <div class="mb-4">
+        <a href="{% url 'detalhar_estudante' estudante.pk %}"
+           class="btn btn-outline-secondary mb-4">
+            ← Voltar para detalhes
+        </a>
 
-        <button type="submit">Salvar alterações</button>
-    </form>
+        <p class="text-uppercase small fw-bold mb-2"
+           style="color: #758080; letter-spacing: 1.5px;">
+            GERENCIAMENTO
+        </p>
 
-    <a href="{% url 'detalhar_estudante' estudante.id %}">
-        Cancelar
-    </a>
+        <h1 class="titulo-pagina mb-2">Editar estudante</h1>
 
-</body>
-</html>
+        <p class="text-secondary mb-0">
+            Atualize os dados do estudante no Beluni.
+        </p>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="row g-4">
+
+                    {% for field in form %}
+                        <div class="col-12 {% if field.name == 'nome' or field.name == 'username' or field.name == 'cpf' %}col-md-6{% endif %}">
+
+                            <label for="{{ field.id_for_label }}"
+                                   class="form-label fw-semibold"
+                                   style="color: #293B3B;">
+                                {{ field.label }}
+                            </label>
+
+                            {{ field }}
+
+                            {% if field.help_text %}
+                                <div class="form-text">
+                                    {{ field.help_text }}
+                                </div>
+                            {% endif %}
+
+                            {% for error in field.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+                <hr class="my-4" style="border-color: #E5E2D9;">
+
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        Salvar alterações
+                    </button>
+
+                    <a href="{% url 'detalhar_estudante' estudante.pk %}"
+                       class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+<style>
+    #id_nome,
+    #id_username,
+    #id_email,
+    #id_cpf,
+    #id_senha {
+        display: block;
+        width: 100%;
+        padding: 0.65rem 0.85rem;
+        border: 1px solid #E5E2D9;
+        border-radius: 0.5rem;
+        background-color: #fff;
+        color: #293B3B;
+    }
+
+    #id_nome:focus,
+    #id_username:focus,
+    #id_email:focus,
+    #id_cpf:focus,
+    #id_senha:focus {
+        border-color: #20494A;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(32, 73, 74, 0.15);
+    }
+</style>
+{% endblock %}

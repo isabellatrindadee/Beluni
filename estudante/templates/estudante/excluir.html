@@ -1,26 +1,96 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Excluir Estudante</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h1>Excluir Estudante</h1>
+{% block titulo %}Excluir estudante | Beluni{% endblock %}
 
-    <p>
-        Tem certeza que deseja excluir o estudante
-        <strong>{{ estudante.nome }}</strong>?
-    </p>
+{% block conteudo %}
+<div class="container py-5" style="max-width: 750px;">
 
-    <form method="POST">
-        {% csrf_token %}
+    <div class="mb-4">
+        <a href="{% url 'listar_estudantes' %}"
+           class="btn btn-outline-secondary mb-4">
+            ← Voltar para estudantes
+        </a>
 
-        <button type="submit">Sim, excluir</button>
-    </form>
+        <p class="text-uppercase small fw-bold mb-2"
+           style="color: #758080; letter-spacing: 1.5px;">
+            GERENCIAMENTO
+        </p>
 
-    <a href="{% url 'detalhar_estudante' estudante.id %}">
-        Cancelar
-    </a>
+        <h1 class="titulo-pagina mb-2">Excluir estudante</h1>
 
-</body>
-</html>
+        <p class="text-secondary">
+            Confirme os dados antes de realizar esta ação.
+        </p>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+
+            <div class="text-center mb-4">
+                <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+                     style="width: 75px; height: 75px; background-color: #F8D7DA; color: #842029;">
+                    <span style="font-size: 2rem;">!</span>
+                </div>
+
+                <h2 class="h4 fw-bold" style="color: #20494A;">
+                    Tem certeza que deseja excluir?
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Esta ação não poderá ser desfeita.
+                </p>
+            </div>
+
+            <div class="rounded-3 p-4 mb-4"
+                 style="background-color: #F7F5EF; border: 1px solid #E5E2D9;">
+
+                <p class="small text-secondary mb-1">Estudante</p>
+
+                <h3 class="h5 fw-bold mb-3" style="color: #20494A;">
+                    {{ estudante.nome }}
+                </h3>
+
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <p class="small text-secondary mb-1">Nome de usuário</p>
+                        <p class="fw-semibold mb-0">{{ estudante.username }}</p>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <p class="small text-secondary mb-1">E-mail</p>
+                        <p class="fw-semibold mb-0">
+                            {{ estudante.email|default:"Não informado" }}
+                        </p>
+                    </div>
+
+                    <div class="col-12">
+                        <p class="small text-secondary mb-1">CPF</p>
+                        <p class="fw-semibold mb-0">{{ estudante.cpf }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-warning" role="alert">
+                <strong>Atenção:</strong> ao confirmar, o cadastro deste estudante será excluído.
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <button type="submit" class="btn btn-danger">
+                        Confirmar exclusão
+                    </button>
+
+                    <a href="{% url 'detalhar_estudante' estudante.pk %}"
+                       class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
