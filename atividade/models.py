@@ -31,8 +31,17 @@ class AtividadeInterdisciplinar(models.Model):
         on_delete=models.CASCADE
     )
 
-    criterios_de_avaliacao = models.CharField(max_length=255)
-    orientador = models.CharField(max_length=100)
+    criterios_de_avaliacao = models.CharField(
+    max_length=255,
+    blank=True,
+    default=''
+    )
+
+    orientador = models.CharField(
+    max_length=100,
+    blank=True,
+    default=''
+    )
 
     class Meta:
         verbose_name = "Atividade interdisciplinar"

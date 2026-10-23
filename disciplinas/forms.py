@@ -6,9 +6,18 @@ from .models import Disciplina
 class DisciplinaForm(forms.ModelForm):
     class Meta:
         model = Disciplina
-        fields = ['nomedisciplina', 'estudante']
+
+        fields = ['nomedisciplina']
 
         labels = {
             'nomedisciplina': 'Nome da disciplina',
-            'estudante': 'Estudante',
+        }
+
+        widgets = {
+            'nomedisciplina': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Digite o nome da disciplina',
+                }
+            ),
         }

@@ -1,7 +1,7 @@
 
 from django import forms
 from django.forms import inlineformset_factory
-
+from disciplinas.models import Disciplina
 from .models import Atividade, AtividadeInterdisciplinar
 
 
@@ -68,6 +68,7 @@ class AtividadeForm(forms.ModelForm):
         }
 
 
+
 class AtividadeInterdisciplinarForm(forms.ModelForm):
     class Meta:
         model = AtividadeInterdisciplinar
@@ -92,21 +93,39 @@ class AtividadeInterdisciplinarForm(forms.ModelForm):
                 attrs={
                     'class': 'form-control',
                     'placeholder': 'Informe os critérios (opcional)',
+                    'required': False,
                 }
             ),
             'orientador': forms.TextInput(
                 attrs={
                     'class': 'form-control',
                     'placeholder': 'Nome do orientador (opcional)',
+                    'required': False,
                 }
             ),
         }
 
     def __init__(self, *args, **kwargs):
+        estudante = kwargs.pop('estudante', None)
         super().__init__(*args, **kwargs)
 
         self.fields['criterios_de_avaliacao'].required = False
         self.fields['orientador'].required = False
+
+        self.fields['criterios_de_avaliacao'].widget.attrs.pop(
+            'required', None
+        )
+        self.fields['orientador'].widget.attrs.pop(
+            'required', None
+        )
+
+        self.fields['criterios_de_avaliacao'].empty_value = ''
+        self.fields['orientador'].empty_value = ''
+
+        if estudante is not None:
+            self.fields['disciplina'].queryset = (
+                Disciplina.objects.filter(estudante=estudante)
+            )
 
 
 AtividadeInterdisciplinarFormSet = inlineformset_factory(

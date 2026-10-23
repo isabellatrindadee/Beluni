@@ -1,14 +1,27 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
 
 from .models import Disciplina
 from .forms import DisciplinaForm
+from estudante.models import Estudante
+
+
+def obter_estudante(usuario):
+    return get_object_or_404(
+        Estudante,
+        pk=usuario.pk
+    )
 
 
 @login_required
 @permission_required('disciplinas.view_disciplina')
 def listar_disciplinas(request):
-    disciplinas = Disciplina.objects.all()
+    estudante = obter_estudante(request.user)
+
+    disciplinas = Disciplina.objects.filter(
+        estudante=estudante
+    )
 
     return render(
         request,
@@ -20,14 +33,29 @@ def listar_disciplinas(request):
 @login_required
 @permission_required('disciplinas.add_disciplina')
 def criar_disciplina(request):
+    estudante = obter_estudante(request.user)
+
     if request.method == 'POST':
         form = DisciplinaForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            disciplina = form.save(commit=False)
+            disciplina.estudante = estudante
+            disciplina.save()
+
             return redirect('listar_disciplinas')
     else:
         form = DisciplinaForm()
+
+    # Se o formulário tiver um campo estudante, não permita
+    # que ele apresente ou aceite estudantes de outras contas.
+    if 'estudante' in form.fields:
+        form.fields['estudante'].queryset = Estudante.objects.filter(
+            pk=estudante.pk
+        )
+        form.fields['estudante'].widget = form.fields[
+            'estudante'
+        ].hidden_widget()
 
     return render(
         request,
@@ -36,16 +64,21 @@ def criar_disciplina(request):
     )
 
 
-
 @login_required
 @permission_required('disciplinas.view_disciplina')
 def detalhar_disciplina(request, id):
+    estudante = obter_estudante(request.user)
+
     disciplina = get_object_or_404(
-        Disciplina.objects.prefetch_related('atividades'),
+        Disciplina.objects.filter(
+            estudante=estudante
+        ).prefetch_related('atividades'),
         id=id
     )
 
-    atividades = disciplina.atividades.all().order_by('data')
+    atividades = disciplina.atividades.filter(
+        disciplinas__estudante=estudante
+    ).distinct().order_by('data')
 
     return render(
         request,
@@ -60,7 +93,13 @@ def detalhar_disciplina(request, id):
 @login_required
 @permission_required('disciplinas.change_disciplina')
 def editar_disciplina(request, id):
-    disciplina = get_object_or_404(Disciplina, id=id)
+    estudante = obter_estudante(request.user)
+
+    disciplina = get_object_or_404(
+        Disciplina,
+        id=id,
+        estudante=estudante
+    )
 
     if request.method == 'POST':
         form = DisciplinaForm(
@@ -69,10 +108,23 @@ def editar_disciplina(request, id):
         )
 
         if form.is_valid():
-            form.save()
+            disciplina_editada = form.save(commit=False)
+
+            # Impede que o proprietário seja alterado pelo formulário.
+            disciplina_editada.estudante = estudante
+            disciplina_editada.save()
+
             return redirect('listar_disciplinas')
     else:
         form = DisciplinaForm(instance=disciplina)
+
+    if 'estudante' in form.fields:
+        form.fields['estudante'].queryset = Estudante.objects.filter(
+            pk=estudante.pk
+        )
+        form.fields['estudante'].widget = form.fields[
+            'estudante'
+        ].hidden_widget()
 
     return render(
         request,
@@ -87,7 +139,13 @@ def editar_disciplina(request, id):
 @login_required
 @permission_required('disciplinas.delete_disciplina')
 def excluir_disciplina(request, id):
-    disciplina = get_object_or_404(Disciplina, id=id)
+    estudante = obter_estudante(request.user)
+
+    disciplina = get_object_or_404(
+        Disciplina,
+        id=id,
+        estudante=estudante
+    )
 
     if request.method == 'POST':
         disciplina.delete()

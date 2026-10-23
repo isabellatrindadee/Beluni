@@ -1,14 +1,44 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
 
 from .models import Meta
 from .forms import MetaForm
+from estudante.models import Estudante
+
+
+def obter_estudante(usuario):
+    return get_object_or_404(
+        Estudante,
+        pk=usuario.pk
+    )
+
+
+def metas_do_estudante(estudante):
+    return Meta.objects.filter(
+        estudante=estudante
+    )
+
+
+def configurar_formulario(form, estudante):
+    # O estudante não deve ser escolhido manualmente.
+    if 'estudante' in form.fields:
+        form.fields['estudante'].queryset = Estudante.objects.filter(
+            pk=estudante.pk
+        )
+        form.fields['estudante'].required = False
+        form.fields['estudante'].widget = (
+            form.fields['estudante'].hidden_widget()
+        )
+        form.initial['estudante'] = estudante.pk
 
 
 @login_required
 @permission_required('meta.view_meta')
 def listar_metas(request):
-    metas = Meta.objects.select_related('estudante').order_by('data')
+    estudante = obter_estudante(request.user)
+
+    metas = metas_do_estudante(estudante).order_by('data')
 
     return render(
         request,
@@ -20,14 +50,21 @@ def listar_metas(request):
 @login_required
 @permission_required('meta.add_meta')
 def criar_meta(request):
+    estudante = obter_estudante(request.user)
+
     if request.method == 'POST':
         form = MetaForm(request.POST)
+        configurar_formulario(form, estudante)
 
         if form.is_valid():
-            form.save()
+            meta = form.save(commit=False)
+            meta.estudante = estudante
+            meta.save()
+
             return redirect('listar_metas')
     else:
         form = MetaForm()
+        configurar_formulario(form, estudante)
 
     return render(
         request,
@@ -39,7 +76,12 @@ def criar_meta(request):
 @login_required
 @permission_required('meta.view_meta')
 def detalhar_meta(request, id):
-    meta = get_object_or_404(Meta, id=id)
+    estudante = obter_estudante(request.user)
+
+    meta = get_object_or_404(
+        metas_do_estudante(estudante),
+        id=id
+    )
 
     return render(
         request,
@@ -51,16 +93,29 @@ def detalhar_meta(request, id):
 @login_required
 @permission_required('meta.change_meta')
 def editar_meta(request, id):
-    meta = get_object_or_404(Meta, id=id)
+    estudante = obter_estudante(request.user)
+
+    meta = get_object_or_404(
+        metas_do_estudante(estudante),
+        id=id
+    )
 
     if request.method == 'POST':
-        form = MetaForm(request.POST, instance=meta)
+        form = MetaForm(
+            request.POST,
+            instance=meta
+        )
+        configurar_formulario(form, estudante)
 
         if form.is_valid():
-            form.save()
+            meta_editada = form.save(commit=False)
+            meta_editada.estudante = estudante
+            meta_editada.save()
+
             return redirect('listar_metas')
     else:
         form = MetaForm(instance=meta)
+        configurar_formulario(form, estudante)
 
     return render(
         request,
@@ -75,7 +130,12 @@ def editar_meta(request, id):
 @login_required
 @permission_required('meta.delete_meta')
 def excluir_meta(request, id):
-    meta = get_object_or_404(Meta, id=id)
+    estudante = obter_estudante(request.user)
+
+    meta = get_object_or_404(
+        metas_do_estudante(estudante),
+        id=id
+    )
 
     if request.method == 'POST':
         meta.delete()
@@ -92,7 +152,13 @@ def excluir_meta(request, id):
 @permission_required('meta.change_meta')
 def alternar_meta(request, id):
     if request.method == 'POST':
-        meta = get_object_or_404(Meta, id=id)
+        estudante = obter_estudante(request.user)
+
+        meta = get_object_or_404(
+            metas_do_estudante(estudante),
+            id=id
+        )
+
         meta.concluida = not meta.concluida
         meta.save(update_fields=['concluida'])
 
