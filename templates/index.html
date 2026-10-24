@@ -1,0 +1,561 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beluni | Organize sua vida acadêmica</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --petroleo: #20494A;
+            --petroleo-escuro: #173839;
+            --areia: #E8DDC8;
+            --fundo: #F7F5EF;
+            --branco: #FFFFFF;
+            --texto: #263637;
+            --secundario: #687676;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--texto);
+            background: var(--fundo);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* BARRA SUPERIOR */
+
+        .navbar {
+            height: 76px;
+            background: #354448;
+            color: var(--branco);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8.5%;
+            gap: 25px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Fraunces', serif;
+            font-size: 29px;
+            font-weight: 600;
+            letter-spacing: -1px;
+            white-space: nowrap;
+        }
+
+        .logo-simbolo {
+            width: 39px;
+            height: 39px;
+            border-radius: 50%;
+            background: var(--areia);
+            color: var(--petroleo);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 700;
+            font-size: 21px;
+        }
+
+        .menu {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            font-size: 13px;
+        }
+
+        .menu a {
+            color: #E9EEEE;
+            transition: color .2s;
+        }
+
+        .menu a:hover {
+            color: var(--areia);
+        }
+
+        .botao-entrar {
+            background: #79C9D4;
+            color: #173839 !important;
+            padding: 11px 20px;
+            border-radius: 4px;
+            font-weight: 700;
+            transition: .2s;
+        }
+
+        .botao-entrar:hover {
+            background: #A0DFE5;
+            transform: translateY(-1px);
+        }
+
+        /* DESTAQUE PRINCIPAL */
+
+        .hero {
+            min-height: 470px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(247, 245, 239, 0.98) 0%,
+                    rgba(247, 245, 239, 0.94) 35%,
+                    rgba(247, 245, 239, 0.48) 57%,
+                    rgba(247, 245, 239, 0.04) 100%
+                ),
+                url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=2000&q=85')
+                center 48% / cover no-repeat;
+        }
+
+        .hero-conteudo {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 70px 35px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .etiqueta {
+            display: inline-block;
+            color: var(--petroleo);
+            background: #E8DDC8;
+            padding: 7px 13px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 {
+            max-width: 480px;
+            font-family: 'Fraunces', serif;
+            font-size: clamp(38px, 5vw, 58px);
+            line-height: 1.08;
+            letter-spacing: -1.8px;
+            color: #293638;
+            font-weight: 600;
+        }
+
+        .linha {
+            width: 72px;
+            height: 3px;
+            background: var(--petroleo);
+            margin: 22px 0;
+        }
+
+        .hero p {
+            max-width: 380px;
+            color: #586565;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 28px;
+        }
+
+        .botao-principal {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 15px 25px;
+            background: #65C4D2;
+            color: #173839;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            box-shadow: 0 5px 14px rgba(32, 73, 74, .12);
+            transition: .2s;
+        }
+
+        .botao-principal:hover {
+            background: #83D5DF;
+            transform: translateY(-2px);
+        }
+
+        .seta {
+            font-size: 20px;
+        }
+
+        /* FAIXA DE BENEFÍCIOS */
+
+        .beneficios {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background: #FFFFFF;
+            padding: 30px 8%;
+            border-bottom: 1px solid #E8E5DD;
+        }
+
+        .beneficio {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 13px;
+            padding: 8px 15px;
+            border-right: 1px solid #E7E5DF;
+        }
+
+        .beneficio:last-child {
+            border-right: none;
+        }
+
+        .icone {
+            width: 43px;
+            height: 43px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #F0EEE5;
+            font-size: 21px;
+        }
+
+        .beneficio h3 {
+            font-size: 14px;
+            color: var(--petroleo);
+            margin-bottom: 4px;
+        }
+
+        .beneficio span {
+            display: block;
+            color: var(--secundario);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        /* SEÇÃO INFERIOR */
+
+        .sobre {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 70px 30px 75px;
+            text-align: center;
+        }
+
+        .sobre h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 36px;
+            font-weight: 600;
+            color: var(--petroleo);
+            margin-bottom: 15px;
+        }
+
+        .sobre > p {
+            max-width: 620px;
+            margin: 0 auto 35px;
+            color: var(--secundario);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .sobre-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            text-align: left;
+        }
+
+        .sobre-card {
+            padding: 27px;
+            background: #FFFFFF;
+            border: 1px solid #E8E5DD;
+            border-radius: 8px;
+            transition: .2s;
+        }
+
+        .sobre-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(32, 73, 74, .08);
+        }
+
+        .sobre-card .card-icone {
+            font-size: 27px;
+            margin-bottom: 16px;
+        }
+
+        .sobre-card h3 {
+            color: var(--petroleo);
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+
+        .sobre-card p {
+            color: var(--secundario);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        /* RODAPÉ */
+
+        footer {
+            background: var(--petroleo-escuro);
+            color: #E5ECE8;
+            text-align: center;
+            padding: 25px 15px;
+            font-size: 12px;
+        }
+
+        footer strong {
+            font-family: 'Fraunces', serif;
+            font-size: 17px;
+            margin-right: 6px;
+        }
+
+        /* RESPONSIVIDADE */
+
+        @media (max-width: 900px) {
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .menu {
+                gap: 15px;
+            }
+
+            .beneficios {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px 0;
+            }
+
+            .beneficio:nth-child(2) {
+                border-right: none;
+            }
+
+            .hero {
+                background-position: 58% center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                height: auto;
+                min-height: 70px;
+                padding: 17px 5%;
+                flex-wrap: wrap;
+            }
+
+            .logo {
+                font-size: 25px;
+            }
+
+            .menu {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 14px;
+                font-size: 12px;
+            }
+
+            .menu .link-desktop {
+                display: none;
+            }
+
+            .hero {
+                min-height: 480px;
+                background:
+                    linear-gradient(
+                        90deg,
+                        rgba(247, 245, 239, .97),
+                        rgba(247, 245, 239, .78)
+                    ),
+                    url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1000&q=85')
+                    center / cover no-repeat;
+            }
+
+            .hero-conteudo {
+                padding: 55px 25px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
+
+            .beneficios {
+                grid-template-columns: 1fr;
+                padding: 22px 25px;
+            }
+
+            .beneficio {
+                justify-content: flex-start;
+                border-right: none;
+                border-bottom: 1px solid #E7E5DF;
+                padding: 13px 0;
+            }
+
+            .beneficio:last-child {
+                border-bottom: none;
+            }
+
+            .sobre {
+                padding: 50px 22px;
+            }
+
+            .sobre h2 {
+                font-size: 30px;
+            }
+
+            .sobre-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="{% url 'index' %}" class="logo">
+            <span class="logo-simbolo">B</span>
+            <span>beluni</span>
+        </a>
+
+        <nav class="menu">
+            <a class="link-desktop" href="#inicio">Início</a>
+            <a class="link-desktop" href="#recursos">Recursos</a>
+            <a class="link-desktop" href="#sobre">Sobre nós</a>
+            <a href="#recursos">Organização</a>
+            <a class="botao-entrar" href="{% url 'login_estudante' %}">
+                Entrar
+            </a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="inicio">
+            <div class="hero-conteudo">
+                <span class="etiqueta">Sua jornada acadêmica</span>
+
+                <h1>
+                    Sua vida acadêmica, mais leve e organizada.
+                </h1>
+
+                <div class="linha"></div>
+
+                <p>
+                    O Beluni ajuda você a organizar suas disciplinas,
+                    acompanhar atividades, definir metas e aproveitar
+                    cada etapa da sua jornada de estudos.
+                </p>
+
+                <a href="{% url 'login_estudante' %}" class="botao-principal">
+                    Comece sua jornada
+                    <span class="seta">→</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="beneficios" id="recursos">
+            <div class="beneficio">
+                <div class="icone">📚</div>
+                <div>
+                    <h3>Disciplinas</h3>
+                    <span>Organize suas matérias</span>
+                </div>
+            </div>
+
+            <div class="beneficio">
+                <div class="icone">✏️</div>
+                <div>
+                    <h3>Atividades</h3>
+                    <span>Acompanhe seus trabalhos</span>
+                </div>
+            </div>
+
+            <div class="beneficio">
+                <div class="icone">🎯</div>
+                <div>
+                    <h3>Metas</h3>
+                    <span>Transforme planos em conquistas</span>
+                </div>
+            </div>
+
+            <div class="beneficio">
+                <div class="icone">🔔</div>
+                <div>
+                    <h3>Lembretes</h3>
+                    <span>Não perca seus compromissos</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="sobre" id="sobre">
+            <h2>Estude com mais propósito.</h2>
+
+            <p>
+                Uma rotina acadêmica mais organizada começa com pequenas
+                mudanças. Reúna suas tarefas, acompanhe seus objetivos e
+                tenha mais clareza sobre o que precisa fazer.
+            </p>
+
+            <div class="sobre-cards">
+                <article class="sobre-card">
+                    <div class="card-icone">📖</div>
+                    <h3>Tudo em um só lugar</h3>
+                    <p>
+                        Tenha suas disciplinas e atividades organizadas
+                        para encontrar o que precisa sem complicação.
+                    </p>
+                </article>
+
+                <article class="sobre-card">
+                    <div class="card-icone">🌱</div>
+                    <h3>Avance no seu ritmo</h3>
+                    <p>
+                        Defina metas realistas e construa uma rotina
+                        de estudos que combine com você.
+                    </p>
+                </article>
+
+                <article class="sobre-card">
+                    <div class="card-icone">✨</div>
+                    <h3>Mais foco, menos correria</h3>
+                    <p>
+                        Visualize seus compromissos e planeje melhor
+                        seu tempo para estudar com tranquilidade.
+                    </p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <strong>beluni</strong>
+        Sua jornada acadêmica começa aqui.
+        <p style="margin-top: 10px;">© 2026 Beluni. Todos os direitos reservados.</p>
+    </footer>
+
+</body>
+</html>
+

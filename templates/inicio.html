@@ -1,0 +1,204 @@
+
+{% extends 'base.html' %}
+
+{% block titulo %}Início | Beluni{% endblock %}
+
+{% block conteudo %}
+<style>
+    .inicio-boas-vindas {
+        background: linear-gradient(135deg, #20494A, #326564);
+        color: #FFFFFF;
+        padding: 36px;
+        border-radius: 18px;
+        margin-bottom: 28px;
+    }
+
+    .inicio-boas-vindas h1 {
+        font-family: 'Fraunces', serif;
+        font-size: 2.2rem;
+        margin-bottom: 12px;
+    }
+
+    .inicio-boas-vindas p {
+        color: #E8DDC8;
+        margin-bottom: 0;
+        max-width: 650px;
+    }
+
+    .atalho-inicio {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        height: 100%;
+    }
+
+    .atalho-inicio .card {
+        height: 100%;
+        padding: 25px;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+    .atalho-inicio:hover .card {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(32, 73, 74, .12);
+    }
+
+    .atalho-icone {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 54px;
+        height: 54px;
+        border-radius: 14px;
+        background: #E8DDC8;
+        font-size: 26px;
+        margin-bottom: 18px;
+    }
+
+    .atalho-inicio h5 {
+        color: #20494A;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .atalho-inicio p {
+        color: #758080;
+        margin-bottom: 0;
+        line-height: 1.6;
+    }
+
+    .inicio-frase {
+        background: #E8DDC8;
+        border-radius: 16px;
+        padding: 25px;
+        margin-top: 28px;
+    }
+
+    .inicio-frase h4 {
+        color: #20494A;
+        font-family: 'Fraunces', serif;
+    }
+
+    .inicio-frase p {
+        color: #405956;
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 576px) {
+        .inicio-boas-vindas {
+            padding: 25px;
+        }
+
+        .inicio-boas-vindas h1 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+
+<div class="container-fluid py-2">
+
+    <div class="inicio-boas-vindas">
+        <span class="small text-uppercase">
+            Seu espaço de estudos
+        </span>
+
+        <h1 class="mt-3">
+            Olá, {{ request.user.first_name|default:request.user.username }}!
+        </h1>
+
+        <p>
+            Seja bem-vindo(a) ao Beluni!
+            Organize sua rotina acadêmica, acompanhe suas atividades
+            e transforme seus objetivos em conquistas.
+        </p>
+    </div>
+
+    <div class="mb-4">
+        <h2 class="titulo-pagina mb-2">
+            O que vamos estudar hoje?
+        </h2>
+
+        <p class="text-secondary">
+            Escolha uma opção para continuar sua organização acadêmica.
+        </p>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <a href="{% url 'listar_disciplinas' %}"
+               class="atalho-inicio">
+                <div class="card">
+                    <div class="atalho-icone">📚</div>
+
+                    <h5>Disciplinas</h5>
+
+                    <p>
+                        Acesse suas matérias e encontre as atividades
+                        relacionadas a cada disciplina.
+                    </p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <a href="{% url 'listar_atividades' %}"
+               class="atalho-inicio">
+                <div class="card">
+                    <div class="atalho-icone">📝</div>
+
+                    <h5>Atividades</h5>
+
+                    <p>
+                        Consulte seus trabalhos e organize
+                        suas tarefas acadêmicas.
+                    </p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <a href="{% url 'listar_metas' %}"
+               class="atalho-inicio">
+                <div class="card">
+                    <div class="atalho-icone">🎯</div>
+
+                    <h5>Minhas metas</h5>
+
+                    <p>
+                        Acompanhe seus objetivos e marque
+                        as etapas que você já concluiu.
+                    </p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <a href="{% url 'notificacao:listar_notificacoes' %}"
+               class="atalho-inicio">
+                <div class="card">
+                    <div class="atalho-icone">🔔</div>
+
+                    <h5>Notificações</h5>
+
+                    <p>
+                        Confira seus avisos e fique por dentro
+                        das informações importantes.
+                    </p>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+    <div class="inicio-frase">
+        <h4>Um passo de cada vez. ✨</h4>
+
+        <p>
+            Pequenas conquistas diárias constroem grandes resultados.
+            Continue se dedicando e respeite seu próprio ritmo.
+        </p>
+    </div>
+
+</div>
+{% endblock %}

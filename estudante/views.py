@@ -231,3 +231,13 @@ def editar_meu_perfil(request):
         'form': form,
         'estudante': estudante
     })
+
+    
+@login_required
+def inicio(request):
+    return render(request, 'inicio.html')
+
+
+def index(request):
+    return render(request, 'index.html')
+
