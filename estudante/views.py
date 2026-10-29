@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -10,6 +11,10 @@ from .forms import (
     CadastroEstudanteForm,
 )
 
+from disciplinas.models import Disciplina
+from atividade.models import Atividade
+from meta.models import Meta
+
 
 # Verifica se o usuário pertence ao grupo administrador
 def usuario_e_administrador(user):
@@ -21,6 +26,9 @@ def usuario_e_administrador(user):
 
 # LOGIN
 def login_estudante(request):
+    if request.user.is_authenticated:
+        return redirect('inicio')
+
     if request.method == 'POST':
         username = request.POST.get('username')
         senha = request.POST.get('senha')
@@ -33,7 +41,7 @@ def login_estudante(request):
 
         if usuario is not None:
             login(request, usuario)
-            return redirect('listar_atividades')
+            return redirect('inicio')
 
         return render(request, 'estudante/login.html', {
             'erro': 'Usuário ou senha inválidos.'
@@ -112,7 +120,10 @@ def editar_estudante(request, id):
     estudante = get_object_or_404(Estudante, pk=id)
 
     if request.method == 'POST':
-        form = EstudanteForm(request.POST, instance=estudante)
+        form = EstudanteForm(
+            request.POST,
+            instance=estudante
+        )
 
         if form.is_valid():
             estudante = form.save(commit=False)
@@ -178,7 +189,7 @@ def meu_perfil(request):
             request,
             'Seu usuário ainda não possui um perfil de estudante cadastrado.'
         )
-        return redirect('criar_estudante')
+        return redirect('inicio')
 
     return render(request, 'estudante/meu_perfil.html', {
         'estudante': estudante
@@ -197,7 +208,7 @@ def editar_meu_perfil(request):
             request,
             'Seu usuário ainda não possui um perfil de estudante cadastrado.'
         )
-        return redirect('criar_estudante')
+        return redirect('inicio')
 
     if request.method == 'POST':
         form = PerfilEstudanteForm(
@@ -232,11 +243,51 @@ def editar_meu_perfil(request):
         'estudante': estudante
     })
 
-    
+
+# PAINEL INICIAL — VISÃO GERAL DO ESTUDANTE
 @login_required
 def inicio(request):
-    return render(request, 'inicio.html')
+    estudante = Estudante.objects.filter(
+        pk=request.user.pk
+    ).first()
 
+    if estudante is not None:
+        disciplinas = Disciplina.objects.filter(
+            estudante=estudante
+        ).order_by('nomedisciplina')
+
+        atividades = Atividade.objects.filter(
+            disciplinas__estudante=estudante
+        ).distinct().order_by('data')
+
+        metas = Meta.objects.filter(
+            estudante=estudante
+        ).order_by('data')
+
+    else:
+        # Usuários sem perfil de estudante não veem
+        # os dados pessoais de outras contas.
+        disciplinas = Disciplina.objects.none()
+        atividades = Atividade.objects.none()
+        metas = Meta.objects.none()
+
+    contexto = {
+        'disciplinas': disciplinas,
+        'atividades': atividades,
+        'metas': metas,
+        'total_disciplinas': disciplinas.count(),
+        'total_atividades': atividades.count(),
+        'total_metas': metas.count(),
+    }
+
+    return render(
+        request,
+        'inicio.html',
+        contexto
+    )
+
+
+# PÁGINA PÚBLICA DE APRESENTAÇÃO
 
 def index(request):
     return render(request, 'index.html')

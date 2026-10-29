@@ -126,3 +126,5 @@ LOGIN_URL = 'login_estudante'
 LOGIN_REDIRECT_URL = 'listar_atividades'
 
 LOGOUT_REDIRECT_URL = 'login_estudante'
+
+LOGIN_REDIRECT_URL = 'inicio'
