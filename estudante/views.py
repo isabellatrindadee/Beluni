@@ -243,15 +243,41 @@ def editar_meu_perfil(request):
         'estudante': estudante
     })
 
+# PAINEL INICIAL — DASHBOARD DO ADMINISTRADOR E DO ESTUDANTE
 
-# PAINEL INICIAL — VISÃO GERAL DO ESTUDANTE
 @login_required
 def inicio(request):
+
+    # VERIFICA SE O USUÁRIO É ADMINISTRADOR
+    if request.user.groups.filter(name='administrador').exists():
+
+        # Lista dos estudantes cadastrados mais recentemente
+        estudantes_recentes = Estudante.objects.order_by(
+            '-date_joined'
+        )[:8]
+
+        # Estatísticas gerais de todo o sistema
+        contexto = {
+            'total_estudantes': Estudante.objects.count(),
+            'total_disciplinas': Disciplina.objects.count(),
+            'total_atividades': Atividade.objects.count(),
+            'total_metas': Meta.objects.count(),
+            'estudantes_recentes': estudantes_recentes,
+        }
+
+        return render(
+            request,
+            'estudante/dashboard_admin.html',
+            contexto
+        )
+
+    # DASHBOARD NORMAL DO ESTUDANTE
     estudante = Estudante.objects.filter(
         pk=request.user.pk
     ).first()
 
     if estudante is not None:
+
         disciplinas = Disciplina.objects.filter(
             estudante=estudante
         ).order_by('nomedisciplina')
@@ -265,8 +291,6 @@ def inicio(request):
         ).order_by('data')
 
     else:
-        # Usuários sem perfil de estudante não veem
-        # os dados pessoais de outras contas.
         disciplinas = Disciplina.objects.none()
         atividades = Atividade.objects.none()
         metas = Meta.objects.none()
@@ -285,7 +309,6 @@ def inicio(request):
         'inicio.html',
         contexto
     )
-
 
 # PÁGINA PÚBLICA DE APRESENTAÇÃO
 

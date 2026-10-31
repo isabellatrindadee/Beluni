@@ -1,0 +1,402 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Dashboard administrativo | Beluni{% endblock %}
+
+{% block conteudo %}
+
+<div class="container-fluid py-2">
+
+    <!-- CABEÇALHO -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+
+        <div>
+            <span class="small text-uppercase fw-bold"
+                  style="color: #758080; letter-spacing: 2px;">
+                BELUNI · ADMINISTRAÇÃO
+            </span>
+
+            <h1 class="titulo-pagina mt-2 mb-2">
+                Painel administrativo
+            </h1>
+
+            <p class="text-secondary mb-0">
+                Acompanhe os cadastros e os dados gerais do Beluni.
+            </p>
+        </div>
+
+        <a href="{% url 'listar_estudantes' %}"
+           class="btn btn-primary">
+            + Gerenciar estudantes
+        </a>
+
+    </div>
+
+
+    <!-- BOAS-VINDAS -->
+    <div class="card border-0 mb-4"
+         style="background: linear-gradient(135deg, #173839, #326564); color: white;">
+
+        <div class="card-body p-4 p-md-5">
+
+            <span class="small text-uppercase"
+                  style="letter-spacing: 1.5px; color: #E8DDC8;">
+                VISÃO GERAL DO SISTEMA
+            </span>
+
+            <h2 class="mt-3 mb-3"
+                style="font-family: 'Fraunces', serif;">
+                Olá, {{ request.user.first_name|default:request.user.username }}!
+            </h2>
+
+            <p class="mb-0">
+                Bem-vindo ao painel administrativo. Aqui você pode
+                acompanhar os estudantes cadastrados e visualizar
+                os números gerais da plataforma.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- INDICADORES -->
+    <div class="row g-3 mb-4">
+
+        <!-- ESTUDANTES -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+                            <p class="text-secondary mb-2">
+                                Estudantes cadastrados
+                            </p>
+
+                            <h2 class="fw-bold mb-0"
+                                style="color: #20494A;">
+                                {{ total_estudantes }}
+                            </h2>
+                        </div>
+
+                        <div class="rounded-3 d-flex align-items-center justify-content-center"
+                             style="width: 52px; height: 52px; background: #E8DDC8; color: #20494A; font-size: 1.5rem;">
+                            ♙
+                        </div>
+
+                    </div>
+
+                    <a href="{% url 'listar_estudantes' %}"
+                       class="btn btn-outline-primary btn-sm mt-3">
+                        Ver estudantes
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- DISCIPLINAS -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+                            <p class="text-secondary mb-2">
+                                Disciplinas
+                            </p>
+
+                            <h2 class="fw-bold mb-0"
+                                style="color: #20494A;">
+                                {{ total_disciplinas }}
+                            </h2>
+                        </div>
+
+                        <div class="rounded-3 d-flex align-items-center justify-content-center"
+                             style="width: 52px; height: 52px; background: #DCE9E5; color: #20494A; font-size: 1.5rem;">
+                            ▤
+                        </div>
+
+                    </div>
+
+                    <p class="small text-secondary mt-3 mb-0">
+                        Total cadastrado na plataforma.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ATIVIDADES -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+                            <p class="text-secondary mb-2">
+                                Atividades
+                            </p>
+
+                            <h2 class="fw-bold mb-0"
+                                style="color: #20494A;">
+                                {{ total_atividades }}
+                            </h2>
+                        </div>
+
+                        <div class="rounded-3 d-flex align-items-center justify-content-center"
+                             style="width: 52px; height: 52px; background: #F6E8CB; color: #20494A; font-size: 1.5rem;">
+                            ▦
+                        </div>
+
+                    </div>
+
+                    <p class="small text-secondary mt-3 mb-0">
+                        Total cadastrado na plataforma.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- METAS -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+                            <p class="text-secondary mb-2">
+                                Metas
+                            </p>
+
+                            <h2 class="fw-bold mb-0"
+                                style="color: #20494A;">
+                                {{ total_metas }}
+                            </h2>
+                        </div>
+
+                        <div class="rounded-3 d-flex align-items-center justify-content-center"
+                             style="width: 52px; height: 52px; background: #E8E0EB; color: #20494A; font-size: 1.5rem;">
+                            ◎
+                        </div>
+
+                    </div>
+
+                    <p class="small text-secondary mt-3 mb-0">
+                        Total cadastrado na plataforma.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ESTUDANTES RECENTES -->
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body p-0">
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 p-4">
+
+                <div>
+                    <h2 class="h5 fw-bold mb-1"
+                        style="color: #20494A;">
+                        Estudantes cadastrados
+                    </h2>
+
+                    <p class="text-secondary small mb-0">
+                        Veja os últimos estudantes registrados na plataforma.
+                    </p>
+                </div>
+
+                <a href="{% url 'listar_estudantes' %}"
+                   class="btn btn-outline-primary btn-sm">
+                    Ver todos
+                </a>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Estudante</th>
+                            <th>Nome de usuário</th>
+                            <th>E-mail</th>
+                            <th>Cadastro</th>
+                            <th class="text-end pe-4">Ação</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for estudante in estudantes_recentes %}
+
+                            <tr>
+
+                                <td class="ps-4">
+
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                             style="width: 40px; height: 40px; background: #E8DDC8; color: #20494A; font-weight: 700;">
+
+                                            {{ estudante.nome|first|upper }}
+
+                                        </div>
+
+                                        <div>
+                                            <div class="fw-semibold">
+                                                {{ estudante.nome }}
+                                            </div>
+
+                                            <small class="text-secondary">
+                                                ID: {{ estudante.pk }}
+                                            </small>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    {{ estudante.username }}
+                                </td>
+
+                                <td>
+                                    {{ estudante.email|default:"Não informado" }}
+                                </td>
+
+                                <td>
+                                    {{ estudante.date_joined|date:"d/m/Y" }}
+                                </td>
+
+                                <td class="text-end pe-4">
+
+                                    <a href="{% url 'detalhar_estudante' estudante.pk %}"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Ver perfil
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+                                <td colspan="5"
+                                    class="text-center text-secondary py-5">
+
+                                    <div class="mb-2"
+                                         style="font-size: 2rem;">
+                                        ♙
+                                    </div>
+
+                                    <p class="fw-semibold mb-1">
+                                        Nenhum estudante cadastrado.
+                                    </p>
+
+                                    <p class="small mb-3">
+                                        Quando houver estudantes registrados, eles aparecerão aqui.
+                                    </p>
+
+                                    <a href="{% url 'criar_estudante' %}"
+                                       class="btn btn-primary btn-sm">
+                                        Cadastrar estudante
+                                    </a>
+
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="p-3 px-4"
+                 style="border-top: 1px solid #E5E2D9;">
+
+                <span class="small text-secondary">
+                    Exibindo até 8 estudantes cadastrados mais recentemente.
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACESSOS RÁPIDOS -->
+    <div class="row g-3">
+
+        <div class="col-12 col-md-6">
+
+            <div class="card h-100">
+                <div class="card-body p-4">
+
+                    <h3 class="h6 fw-bold"
+                        style="color: #20494A;">
+                        Gerenciamento de estudantes
+                    </h3>
+
+                    <p class="text-secondary small">
+                        Consulte os cadastros e acesse as opções de
+                        visualização, edição e exclusão.
+                    </p>
+
+                    <a href="{% url 'listar_estudantes' %}"
+                       class="btn btn-primary">
+                        Abrir listagem
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-12 col-md-6">
+
+            <div class="card h-100">
+                <div class="card-body p-4">
+
+                    <h3 class="h6 fw-bold"
+                        style="color: #20494A;">
+                        Página pública
+                    </h3>
+
+                    <p class="text-secondary small">
+                        Acesse a página pública de apresentação do Beluni.
+                    </p>
+
+                    <a href="{% url 'index' %}"
+                       class="btn btn-outline-primary">
+                        Ver página pública
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
