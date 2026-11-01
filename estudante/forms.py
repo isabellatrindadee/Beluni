@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import Estudante
 
-
 class EstudanteForm(forms.ModelForm):
     username = forms.CharField(
         label='Usuário',
@@ -14,6 +13,44 @@ class EstudanteForm(forms.ModelForm):
         widget=forms.PasswordInput,
         required=False
     )
+
+    class Meta:
+        model = Estudante
+        fields = ['username', 'senha', 'cpf', 'nome']
+
+        labels = {
+            'username': 'Usuário',
+            'cpf': 'CPF',
+            'nome': 'Nome',
+        }
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+
+        usuarios = User.objects.filter(
+            username__iexact=username
+        ).exclude(pk=self.instance.pk)
+
+        if usuarios.exists():
+            raise forms.ValidationError(
+                'Este nome de usuário já está em uso.'
+            )
+
+        return username
+
+    def clean_cpf(self):
+        cpf = self.cleaned_data['cpf'].strip()
+
+        estudantes = Estudante.objects.filter(
+            cpf=cpf
+        ).exclude(pk=self.instance.pk)
+
+        if estudantes.exists():
+            raise forms.ValidationError(
+                'Este CPF já está cadastrado.'
+            )
+
+        return cpf
 
     class Meta:
         model = Estudante

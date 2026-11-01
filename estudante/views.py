@@ -16,13 +16,14 @@ from atividade.models import Atividade
 from meta.models import Meta
 
 
-# Verifica se o usuário pertence ao grupo administrador
 def usuario_e_administrador(user):
     return (
         user.is_authenticated
-        and user.groups.filter(name='administrador').exists()
+        and (
+            user.is_superuser
+            or user.groups.filter(name='administrador').exists()
+        )
     )
-
 
 # LOGIN
 def login_estudante(request):
@@ -248,15 +249,13 @@ def editar_meu_perfil(request):
 @login_required
 def inicio(request):
 
-    # VERIFICA SE O USUÁRIO É ADMINISTRADOR
-    if request.user.groups.filter(name='administrador').exists():
+    # PAINEL DO ADMINISTRADOR
+    if usuario_e_administrador(request.user):
 
-        # Lista dos estudantes cadastrados mais recentemente
         estudantes_recentes = Estudante.objects.order_by(
             '-date_joined'
         )[:8]
 
-        # Estatísticas gerais de todo o sistema
         contexto = {
             'total_estudantes': Estudante.objects.count(),
             'total_disciplinas': Disciplina.objects.count(),
@@ -271,13 +270,12 @@ def inicio(request):
             contexto
         )
 
-    # DASHBOARD NORMAL DO ESTUDANTE
+    # PAINEL DO ESTUDANTE
     estudante = Estudante.objects.filter(
         pk=request.user.pk
     ).first()
 
-    if estudante is not None:
-
+    if estudante:
         disciplinas = Disciplina.objects.filter(
             estudante=estudante
         ).order_by('nomedisciplina')
@@ -304,11 +302,7 @@ def inicio(request):
         'total_metas': metas.count(),
     }
 
-    return render(
-        request,
-        'inicio.html',
-        contexto
-    )
+    return render(request, 'inicio.html', contexto)
 
 # PÁGINA PÚBLICA DE APRESENTAÇÃO
 

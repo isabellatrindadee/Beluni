@@ -1,7 +1,8 @@
+
 from datetime import timedelta
 
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
 from .models import Notificacao
@@ -10,37 +11,42 @@ from estudante.models import Estudante
 from atividade.models import Atividade
 
 
-def gerar_notificacoes_pendentes(request):
+def gerar_notificacoes_pendentes(estudante):
     hoje = timezone.localdate()
     data_entrega = hoje + timedelta(days=1)
 
+    # Busca somente atividades das disciplinas do estudante
     atividades = Atividade.objects.filter(
+        disciplinas__estudante=estudante,
         data=data_entrega,
         status__iexact='Pendente'
-    )
-
-    estudantes = Estudante.objects.all()
+    ).distinct()
 
     for atividade in atividades:
-        for estudante in estudantes:
-            Notificacao.objects.get_or_create(
-                estudante=estudante,
-                atividade=atividade,
-                defaults={
-                    'mensagem': (
-                        f'A atividade "{atividade.titulo}" '
-                        'deve ser entregue amanhã!'
-                    )
-                }
-            )
+        Notificacao.objects.get_or_create(
+            estudante=estudante,
+            atividade=atividade,
+            defaults={
+                'mensagem': (
+                    f'A atividade "{atividade.titulo}" '
+                    'deve ser entregue amanhã!'
+                )
+            }
+        )
 
 
 @login_required
-@permission_required('notificacao.view_notificacao')
 def listar_notificacoes(request):
-    gerar_notificacoes_pendentes(request)
+    estudante = get_object_or_404(
+        Estudante,
+        pk=request.user.pk
+    )
 
-    notificacoes = Notificacao.objects.all()
+    gerar_notificacoes_pendentes(estudante)
+
+    notificacoes = Notificacao.objects.filter(
+        estudante=estudante
+    ).order_by('-id')
 
     return render(
         request,
@@ -50,9 +56,12 @@ def listar_notificacoes(request):
 
 
 @login_required
-@permission_required('notificacao.view_notificacao')
 def detalhar_notificacao(request, pk):
-    notificacao = get_object_or_404(Notificacao, pk=pk)
+    notificacao = get_object_or_404(
+        Notificacao,
+        pk=pk,
+        estudante_id=request.user.pk
+    )
 
     return render(
         request,
@@ -62,9 +71,12 @@ def detalhar_notificacao(request, pk):
 
 
 @login_required
-@permission_required('notificacao.change_notificacao')
 def editar_notificacao(request, pk):
-    notificacao = get_object_or_404(Notificacao, pk=pk)
+    notificacao = get_object_or_404(
+        Notificacao,
+        pk=pk,
+        estudante_id=request.user.pk
+    )
 
     if request.method == 'POST':
         form = NotificacaoForm(
@@ -89,9 +101,12 @@ def editar_notificacao(request, pk):
 
 
 @login_required
-@permission_required('notificacao.delete_notificacao')
 def excluir_notificacao(request, pk):
-    notificacao = get_object_or_404(Notificacao, pk=pk)
+    notificacao = get_object_or_404(
+        Notificacao,
+        pk=pk,
+        estudante_id=request.user.pk
+    )
 
     if request.method == 'POST':
         notificacao.delete()
