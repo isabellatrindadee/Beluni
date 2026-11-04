@@ -8,24 +8,16 @@
 
     <title>{% block titulo %}Beluni{% endblock %}</title>
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --beluni-petroleo: #20494A;
             --beluni-petroleo-escuro: #173839;
-            --beluni-petroleo-claro: #326564;
             --beluni-areia: #E8DDC8;
             --beluni-fundo: #F7F5EF;
             --beluni-branco: #FFFFFF;
@@ -54,7 +46,7 @@
             bottom: 0;
             width: 255px;
             background-color: var(--beluni-petroleo);
-            color: var(--beluni-branco);
+            color: white;
             display: flex;
             flex-direction: column;
             padding: 28px 18px;
@@ -70,12 +62,12 @@
             font-size: 2rem;
             font-weight: 700;
             padding: 0 12px 28px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+            border-bottom: 1px solid rgba(255,255,255,0.16);
             margin-bottom: 24px;
         }
 
         .sidebar-brand:hover {
-            color: var(--beluni-branco);
+            color: white;
         }
 
         .sidebar-label {
@@ -107,18 +99,12 @@
             padding: 12px 14px;
             border-radius: 9px;
             font-size: 0.92rem;
-            transition: background-color 0.2s, color 0.2s;
+            transition: background-color 0.2s;
         }
 
         .menu-link:hover {
             background-color: var(--beluni-petroleo-escuro);
             color: var(--beluni-areia);
-        }
-
-        .menu-link.active {
-            background-color: var(--beluni-petroleo-escuro);
-            color: var(--beluni-areia);
-            font-weight: 600;
         }
 
         .menu-icone {
@@ -133,9 +119,9 @@
         }
 
         .usuario-info {
-            border-top: 1px solid rgba(255, 255, 255, 0.16);
+            border-top: 1px solid rgba(255,255,255,0.16);
             padding: 18px 10px 12px;
-            color: #F7F5EF;
+            color: white;
             font-size: 0.85rem;
             overflow-wrap: anywhere;
         }
@@ -151,7 +137,7 @@
             text-align: center;
             text-decoration: none;
             color: var(--beluni-areia);
-            border: 1px solid rgba(232, 221, 200, 0.55);
+            border: 1px solid rgba(232,221,200,0.55);
             border-radius: 8px;
             padding: 10px;
             transition: background-color 0.2s;
@@ -162,7 +148,7 @@
             color: white;
         }
 
-        /* ÁREA PRINCIPAL */
+        /* CONTEÚDO */
 
         .main-content {
             margin-left: 255px;
@@ -185,10 +171,10 @@
         }
 
         .card {
-            background-color: var(--beluni-branco);
+            background-color: white;
             border: 1px solid var(--beluni-borda);
             border-radius: 14px;
-            box-shadow: 0 4px 14px rgba(32, 73, 74, 0.05);
+            box-shadow: 0 4px 14px rgba(32,73,74,0.05);
         }
 
         .table {
@@ -237,7 +223,6 @@
         .btn-outline-primary:hover {
             background-color: var(--beluni-petroleo);
             border-color: var(--beluni-petroleo);
-            color: white;
         }
 
         .form-control,
@@ -251,10 +236,9 @@
             border: 1px solid var(--beluni-borda);
             border-radius: 8px;
             padding: 10px 12px;
-            background-color: var(--beluni-branco);
+            background-color: white;
             color: var(--beluni-texto);
             font-family: 'Inter', sans-serif;
-            box-sizing: border-box;
         }
 
         form select[multiple] {
@@ -272,7 +256,7 @@
         form select:focus,
         form textarea:focus {
             border-color: var(--beluni-petroleo);
-            box-shadow: 0 0 0 0.2rem rgba(32, 73, 74, 0.12);
+            box-shadow: 0 0 0 0.2rem rgba(32,73,74,0.12);
             outline: none;
         }
 
@@ -280,12 +264,9 @@
             color: var(--beluni-secundario) !important;
         }
 
-        /* BOTÃO DO MENU EM TELAS PEQUENAS */
+        /* RESPONSIVIDADE */
 
-        .mobile-topbar {
-            display: none;
-        }
-
+        .mobile-topbar,
         .sidebar-overlay {
             display: none;
         }
@@ -305,7 +286,7 @@
                 display: block;
                 position: fixed;
                 inset: 0;
-                background: rgba(0, 0, 0, 0.4);
+                background: rgba(0,0,0,0.4);
                 z-index: 1020;
             }
 
@@ -337,7 +318,7 @@
             }
 
             .mobile-menu-btn {
-                border: 1px solid rgba(255, 255, 255, 0.4);
+                border: 1px solid rgba(255,255,255,0.4);
                 color: white;
                 background: transparent;
                 border-radius: 7px;
@@ -364,7 +345,8 @@
 
 <body>
 
-    <!-- MENU SUPERIOR MOBILE -->
+    <!-- MENU SUPERIOR PARA CELULAR -->
+
     <div class="mobile-topbar">
         <button
             class="mobile-menu-btn"
@@ -387,100 +369,142 @@
     ></div>
 
     <!-- MENU LATERAL -->
+
     <aside class="sidebar" id="sidebar">
 
         <a class="sidebar-brand" href="{% url 'inicio' %}">
             Beluni
         </a>
 
-        <div class="sidebar-label">Menu principal</div>
+        {% if request.user.is_authenticated %}
 
-        <ul class="sidebar-nav">
+            {% if request.session.is_admin %}
 
-            <li>
-                <a class="menu-link" href="{% url 'inicio' %}">
-                    <span class="menu-icone">🏠</span>
-                    Início
-                </a>
-            </li>
+                <!-- MENU DO ADMINISTRADOR -->
 
-            <li>
-                <a class="menu-link" href="{% url 'listar_disciplinas' %}">
-                    <span class="menu-icone">📚</span>
-                    Disciplinas
-                </a>
-            </li>
+                <div class="sidebar-label">
+                    Menu do administrador
+                </div>
 
-            <li>
-                <a class="menu-link" href="{% url 'listar_atividades' %}">
-                    <span class="menu-icone">📝</span>
-                    Atividades
-                </a>
-            </li>
+                <ul class="sidebar-nav">
 
-            <li>
-                <a class="menu-link" href="{% url 'listar_metas' %}">
-                    <span class="menu-icone">🎯</span>
-                    Metas
-                </a>
-            </li>
+                    <li>
+                        <a class="menu-link" href="{% url 'inicio' %}">
+                            <span class="menu-icone">📊</span>
+                            Painel administrativo
+                        </a>
+                    </li>
 
-            <li>
-                <a class="menu-link" href="{% url 'notificacao:listar_notificacoes' %}">
-                    <span class="menu-icone">🔔</span>
-                    Notificações
-                </a>
-            </li>
+                    <li>
+                        <a class="menu-link" href="{% url 'listar_estudantes' %}">
+                            <span class="menu-icone">👥</span>
+                            Gerenciar estudantes
+                        </a>
+                    </li>
 
-            {% if perms.estudante.view_estudante %}
-            <li>
-                <a class="menu-link" href="{% url 'listar_estudantes' %}">
-                    <span class="menu-icone">👥</span>
-                    Estudantes
-                </a>
-            </li>
+                    <li>
+                        <a class="menu-link" href="{% url 'index' %}">
+                            <span class="menu-icone">🌐</span>
+                            Página pública
+                        </a>
+                    </li>
+
+                </ul>
+
+            {% else %}
+
+                <!-- MENU DO ESTUDANTE -->
+
+                <div class="sidebar-label">
+                    Menu do estudante
+                </div>
+
+                <ul class="sidebar-nav">
+
+                    <li>
+                        <a class="menu-link" href="{% url 'inicio' %}">
+                            <span class="menu-icone">🏠</span>
+                            Início
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="menu-link" href="{% url 'listar_disciplinas' %}">
+                            <span class="menu-icone">📚</span>
+                            Disciplinas
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="menu-link" href="{% url 'listar_atividades' %}">
+                            <span class="menu-icone">📝</span>
+                            Atividades
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="menu-link" href="{% url 'listar_metas' %}">
+                            <span class="menu-icone">🎯</span>
+                            Metas
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="menu-link" href="{% url 'notificacao:listar_notificacoes' %}">
+                            <span class="menu-icone">🔔</span>
+                            Notificações
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="menu-link" href="{% url 'meu_perfil' %}">
+                            <span class="menu-icone">👤</span>
+                            Meu perfil
+                        </a>
+                    </li>
+
+                </ul>
+
             {% endif %}
 
-            <li>
-                <a class="menu-link" href="{% url 'meu_perfil' %}">
-                    <span class="menu-icone">👤</span>
-                    Meu perfil
+            <!-- IDENTIFICAÇÃO E SAÍDA -->
+
+            <div class="sidebar-rodape">
+
+                <div class="usuario-info">
+                    Conectado como
+
+                    <strong>
+                        {{ request.user.first_name|default:request.user.username }}
+                    </strong>
+
+                    {% if request.session.is_admin %}
+                        <small>Administrador</small>
+                    {% else %}
+                        <small>Estudante</small>
+                    {% endif %}
+                </div>
+
+                <a class="btn-sair" href="{% url 'logout_estudante' %}">
+                    <span class="menu-icone">🚪</span>
+                    Sair da conta
                 </a>
-            </li>
 
-        </ul>
-
-        <div class="sidebar-rodape">
-
-            {% if request.user.is_authenticated %}
-            <div class="usuario-info">
-                Conectado como
-                <strong>{{ request.user.first_name|default:request.user.username }}</strong>
-
-                {% if request.user.is_superuser %}
-                    <small>Administrador</small>
-                {% elif perms.estudante.view_estudante %}
-                    <small>Administrador</small>
-                {% else %}
-                    <small>Estudante</small>
-                {% endif %}
             </div>
 
-            <a class="btn-sair" href="{% url 'logout_estudante' %}">
-                Sair da conta
-            </a>
-            {% endif %}
-
-        </div>
+        {% endif %}
 
     </aside>
 
-    <!-- CONTEÚDO DA PÁGINA -->
+    <!-- CONTEÚDO PRINCIPAL -->
+
     <main class="main-content">
+
         <div class="conteudo">
 
             {% if messages %}
                 {% for message in messages %}
+
                     <div
                         class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show"
                         role="alert"
@@ -494,6 +518,7 @@
                             aria-label="Fechar"
                         ></button>
                     </div>
+
                 {% endfor %}
             {% endif %}
 
@@ -501,6 +526,7 @@
             {% endblock %}
 
         </div>
+
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

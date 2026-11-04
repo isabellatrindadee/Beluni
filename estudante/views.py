@@ -25,9 +25,11 @@ def usuario_e_administrador(user):
         )
     )
 
+
 # LOGIN
 def login_estudante(request):
     if request.user.is_authenticated:
+        request.session['is_admin'] = usuario_e_administrador(request.user)
         return redirect('inicio')
 
     if request.method == 'POST':
@@ -42,6 +44,9 @@ def login_estudante(request):
 
         if usuario is not None:
             login(request, usuario)
+
+            request.session['is_admin'] = usuario_e_administrador(usuario)
+
             return redirect('inicio')
 
         return render(request, 'estudante/login.html', {
@@ -244,13 +249,17 @@ def editar_meu_perfil(request):
         'estudante': estudante
     })
 
-# PAINEL INICIAL — DASHBOARD DO ADMINISTRADOR E DO ESTUDANTE
 
+# PAINEL INICIAL — ADMINISTRADOR E ESTUDANTE
 @login_required
 def inicio(request):
 
+    # Atualiza a identificação na sessão
+    administrador = usuario_e_administrador(request.user)
+    request.session['is_admin'] = administrador
+
     # PAINEL DO ADMINISTRADOR
-    if usuario_e_administrador(request.user):
+    if administrador:
 
         estudantes_recentes = Estudante.objects.order_by(
             '-date_joined'
@@ -304,8 +313,6 @@ def inicio(request):
 
     return render(request, 'inicio.html', contexto)
 
-# PÁGINA PÚBLICA DE APRESENTAÇÃO
-
+# PÁGINA PÚBLICA
 def index(request):
     return render(request, 'index.html')
-
