@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% block titulo %}Perfil do estudante | Beluni{% endblock %}
@@ -7,39 +8,51 @@
 <div class="container py-4" style="max-width: 950px;">
 
     <div class="mb-4">
-        <a href="{% url 'listar_atividades' %}"
+
+        <a href="{% url 'inicio' %}"
            class="btn btn-outline-primary mb-4">
-            ← Voltar
+            ← Voltar ao painel administrativo
         </a>
 
         <p class="text-uppercase small fw-bold mb-2"
            style="color: #758080; letter-spacing: 1.5px;">
-            MINHA CONTA
+            GESTÃO DE ESTUDANTES
         </p>
 
-        <h1 class="titulo-pagina mb-2">Perfil do estudante</h1>
+        <h1 class="titulo-pagina mb-2">
+            Perfil do estudante
+        </h1>
 
         <p class="text-secondary mb-0">
-            Consulte seus dados pessoais e mantenha seu perfil atualizado.
+            Consulte as informações cadastrais deste estudante.
         </p>
+
     </div>
 
     <div class="card border-0 shadow-sm">
+
         <div class="card-body p-4 p-md-5">
 
             <div class="text-center mb-4">
+
                 <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
                      style="width: 90px; height: 90px; background-color: #E8DDC8; color: #20494A; font-size: 2rem; font-weight: bold;">
+
                     {{ estudante.nome|first|upper }}
+
                 </div>
 
-                <h2 class="h4 fw-bold mb-1" style="color: #20494A;">
+                <h2 class="h4 fw-bold mb-1"
+                    style="color: #20494A;">
+
                     {{ estudante.nome }}
+
                 </h2>
 
                 <p class="text-secondary mb-0">
                     Perfil do Beluni
                 </p>
+
             </div>
 
             <hr style="border-color: #E5E2D9;">
@@ -50,6 +63,7 @@
                     <label class="small text-secondary mb-1">
                         Nome completo
                     </label>
+
                     <p class="fw-semibold mb-0">
                         {{ estudante.nome }}
                     </p>
@@ -59,6 +73,7 @@
                     <label class="small text-secondary mb-1">
                         Nome de usuário
                     </label>
+
                     <p class="fw-semibold mb-0">
                         {{ estudante.username }}
                     </p>
@@ -68,6 +83,7 @@
                     <label class="small text-secondary mb-1">
                         E-mail
                     </label>
+
                     <p class="fw-semibold mb-0">
                         {{ estudante.email|default:"Não informado" }}
                     </p>
@@ -77,8 +93,9 @@
                     <label class="small text-secondary mb-1">
                         CPF
                     </label>
+
                     <p class="fw-semibold mb-0">
-                        {{ estudante.cpf }}
+                        {{ estudante.cpf|default:"Não informado" }}
                     </p>
                 </div>
 
@@ -87,19 +104,24 @@
             <div class="d-flex flex-wrap gap-2 mt-5 pt-4"
                  style="border-top: 1px solid #E5E2D9;">
 
-                <a href="{% url 'editar_meu_perfil' %}"
+                <a href="{% url 'editar_estudante' estudante.id %}"
                    class="btn btn-primary">
-                    Editar meu perfil
+
+                    Editar cadastro
+
                 </a>
 
-                <a href="{% url 'listar_atividades' %}"
+                <a href="{% url 'inicio' %}"
                    class="btn btn-outline-secondary">
-                    Voltar para atividades
+
+                    Voltar ao painel administrativo
+
                 </a>
 
             </div>
 
         </div>
+
     </div>
 
 </div>

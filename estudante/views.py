@@ -29,7 +29,6 @@ def usuario_e_administrador(user):
 # LOGIN
 def login_estudante(request):
     if request.user.is_authenticated:
-        request.session['is_admin'] = usuario_e_administrador(request.user)
         return redirect('inicio')
 
     if request.method == 'POST':
@@ -44,9 +43,6 @@ def login_estudante(request):
 
         if usuario is not None:
             login(request, usuario)
-
-            request.session['is_admin'] = usuario_e_administrador(usuario)
-
             return redirect('inicio')
 
         return render(request, 'estudante/login.html', {
@@ -88,12 +84,9 @@ def criar_estudante(request):
     })
 
 
-# LISTAGEM DE ESTUDANTES — SOMENTE ADMINISTRADORES
+# LISTAR ESTUDANTES
 @login_required
-@user_passes_test(
-    usuario_e_administrador,
-    login_url='login_estudante'
-)
+@user_passes_test(usuario_e_administrador, login_url='login_estudante')
 def listar_estudantes(request):
     estudantes = Estudante.objects.all()
 
@@ -102,12 +95,9 @@ def listar_estudantes(request):
     })
 
 
-# DETALHES DE UM ESTUDANTE — SOMENTE ADMINISTRADORES
+# DETALHAR ESTUDANTE
 @login_required
-@user_passes_test(
-    usuario_e_administrador,
-    login_url='login_estudante'
-)
+@user_passes_test(usuario_e_administrador, login_url='login_estudante')
 def detalhar_estudante(request, id):
     estudante = get_object_or_404(Estudante, pk=id)
 
@@ -116,20 +106,14 @@ def detalhar_estudante(request, id):
     })
 
 
-# EDITAR ESTUDANTE — SOMENTE ADMINISTRADORES
+# EDITAR ESTUDANTE
 @login_required
-@user_passes_test(
-    usuario_e_administrador,
-    login_url='login_estudante'
-)
+@user_passes_test(usuario_e_administrador, login_url='login_estudante')
 def editar_estudante(request, id):
     estudante = get_object_or_404(Estudante, pk=id)
 
     if request.method == 'POST':
-        form = EstudanteForm(
-            request.POST,
-            instance=estudante
-        )
+        form = EstudanteForm(request.POST, instance=estudante)
 
         if form.is_valid():
             estudante = form.save(commit=False)
@@ -145,10 +129,7 @@ def editar_estudante(request, id):
                 'Estudante atualizado com sucesso!'
             )
 
-            return redirect(
-                'detalhar_estudante',
-                id=estudante.pk
-            )
+            return redirect('detalhar_estudante', id=estudante.pk)
 
     else:
         form = EstudanteForm(instance=estudante)
@@ -159,12 +140,9 @@ def editar_estudante(request, id):
     })
 
 
-# EXCLUIR ESTUDANTE — SOMENTE ADMINISTRADORES
+# EXCLUIR ESTUDANTE
 @login_required
-@user_passes_test(
-    usuario_e_administrador,
-    login_url='login_estudante'
-)
+@user_passes_test(usuario_e_administrador, login_url='login_estudante')
 def excluir_estudante(request, id):
     estudante = get_object_or_404(Estudante, pk=id)
 
@@ -198,7 +176,9 @@ def meu_perfil(request):
         return redirect('inicio')
 
     return render(request, 'estudante/meu_perfil.html', {
-        'estudante': estudante
+        'estudante': estudante,
+        'eh_administrador': usuario_e_administrador(request.user),
+        'url_retorno': 'inicio' if usuario_e_administrador(request.user) else 'listar_atividades',
     })
 
 
@@ -217,10 +197,7 @@ def editar_meu_perfil(request):
         return redirect('inicio')
 
     if request.method == 'POST':
-        form = PerfilEstudanteForm(
-            request.POST,
-            instance=estudante
-        )
+        form = PerfilEstudanteForm(request.POST, instance=estudante)
 
         if form.is_valid():
             estudante = form.save(commit=False)
@@ -246,20 +223,16 @@ def editar_meu_perfil(request):
 
     return render(request, 'estudante/editar_meu_perfil.html', {
         'form': form,
-        'estudante': estudante
+        'estudante': estudante,
+        'url_retorno': 'inicio' if usuario_e_administrador(request.user) else 'listar_atividades',
     })
 
 
-# PAINEL INICIAL — ADMINISTRADOR E ESTUDANTE
+# DASHBOARD
 @login_required
 def inicio(request):
 
-    # Atualiza a identificação na sessão
-    administrador = usuario_e_administrador(request.user)
-    request.session['is_admin'] = administrador
-
-    # PAINEL DO ADMINISTRADOR
-    if administrador:
+    if usuario_e_administrador(request.user):
 
         estudantes_recentes = Estudante.objects.order_by(
             '-date_joined'
@@ -279,7 +252,6 @@ def inicio(request):
             contexto
         )
 
-    # PAINEL DO ESTUDANTE
     estudante = Estudante.objects.filter(
         pk=request.user.pk
     ).first()
@@ -312,6 +284,7 @@ def inicio(request):
     }
 
     return render(request, 'inicio.html', contexto)
+
 
 # PÁGINA PÚBLICA
 def index(request):
