@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
+from django.contrib.auth.models import Group
 
 from .models import Estudante
 from .forms import (
@@ -59,15 +60,22 @@ def logout_estudante(request):
     return redirect('login_estudante')
 
 
-# CADASTRO DE ESTUDANTE
 def criar_estudante(request):
     if request.method == 'POST':
         form = CadastroEstudanteForm(request.POST)
 
         if form.is_valid():
             estudante = form.save(commit=False)
-            estudante.set_password(form.cleaned_data['senha'])
+
+            estudante.set_password(
+                form.cleaned_data['senha']
+            )
+
             estudante.save()
+
+            # Adicionar ao grupo já existente
+            grupo = Group.objects.get(name='estudante')
+            estudante.groups.add(grupo)
 
             messages.success(
                 request,
@@ -82,7 +90,6 @@ def criar_estudante(request):
     return render(request, 'estudante/criar.html', {
         'form': form
     })
-
 
 # LISTAR ESTUDANTES
 @login_required
