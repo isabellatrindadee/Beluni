@@ -1,71 +1,282 @@
-
 {% extends 'base.html' %}
 
-{% block content %}
+{% block titulo %}Meu perfil | Beluni{% endblock %}
 
-<div class="container py-4">
+{% block estilos %}
+<style>
+    .perfil-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 35px 25px;
+    }
+
+    .perfil-subtitulo {
+        color: #527575;
+        letter-spacing: 2px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .perfil-titulo {
+        color: #20494A;
+        font-family: 'Fraunces', serif;
+        font-size: 44px;
+        font-weight: 700;
+        margin-top: 10px;
+    }
+
+    .perfil-descricao {
+        color: #718096;
+        font-size: 17px;
+    }
+
+    .perfil-card {
+        background: white;
+        border: none;
+        border-radius: 22px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+        padding: 45px 55px;
+        margin-top: 28px;
+    }
+
+    .perfil-avatar {
+        width: 78px;
+        height: 78px;
+        border-radius: 50%;
+        background: #eadfc9;
+        color: #20494A;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        font-weight: 600;
+    }
+
+    .perfil-nome {
+        color: #20494A;
+        font-size: 26px;
+        font-weight: 700;
+    }
+
+    .perfil-dado small {
+        color: #718096;
+        font-size: 15px;
+    }
+
+    .perfil-dado p {
+        color: #263b3b;
+        font-size: 17px;
+        font-weight: 600;
+        margin-top: 7px;
+    }
+
+    .perfil-acoes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .btn-perfil {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 27px;
+        border-radius: 30px;
+        background: #20494A;
+        color: white;
+        text-decoration: none;
+        border: 1px solid #20494A;
+        font-size: 16px;
+        transition: 0.2s;
+        cursor: pointer;
+    }
+
+    .btn-perfil:hover {
+        background: #163738;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .btn-voltar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 27px;
+        border-radius: 30px;
+        background: white;
+        color: #718096;
+        text-decoration: none;
+        border: 1px solid #a0a9ad;
+        font-size: 16px;
+        transition: 0.2s;
+    }
+
+    .btn-voltar:hover {
+        background: #f1f3f1;
+        color: #20494A;
+    }
+
+    .exclusao-area {
+        margin-top: 22px;
+        padding-top: 20px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .btn-excluir {
+        background: transparent;
+        border: 1px solid #c65b5b;
+        color: #b44444;
+        border-radius: 30px;
+        padding: 11px 24px;
+        font-size: 15px;
+        transition: 0.2s;
+        cursor: pointer;
+    }
+
+    .btn-excluir:hover {
+        background: #b44444;
+        color: white;
+    }
+
+    .confirmacao-exclusao {
+        display: none;
+        background: #fff8f6;
+        border: 1px solid #efd1cb;
+        border-radius: 15px;
+        padding: 22px;
+        margin-top: 18px;
+    }
+
+    .confirmacao-exclusao.ativo {
+        display: block;
+    }
+
+    .confirmacao-exclusao h5 {
+        color: #a33e3e;
+        font-weight: 700;
+    }
+
+    .confirmacao-exclusao input {
+        width: 100%;
+        max-width: 400px;
+        border: 1px solid #d9dfdc;
+        border-radius: 9px;
+        padding: 12px;
+        margin-top: 10px;
+        outline: none;
+    }
+
+    .confirmacao-exclusao input:focus {
+        border-color: #20494A;
+        box-shadow: 0 0 0 3px rgba(32,73,74,0.10);
+    }
+
+    .btn-confirmar-exclusao {
+        background: #b44444;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 11px 22px;
+        cursor: pointer;
+    }
+
+    .btn-confirmar-exclusao:hover {
+        background: #923535;
+    }
+
+    .btn-cancelar-exclusao {
+        background: white;
+        color: #64748b;
+        border: 1px solid #cbd5e1;
+        border-radius: 25px;
+        padding: 11px 22px;
+        cursor: pointer;
+    }
+
+    @media(max-width: 768px) {
+        .perfil-card {
+            padding: 25px 20px;
+        }
+
+        .perfil-titulo {
+            font-size: 34px;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block conteudo %}
+
+<div class="perfil-container">
 
     <div class="mb-4">
-        <small class="text-uppercase text-muted fw-bold">
-            Minha conta
-        </small>
+        <span class="perfil-subtitulo">
+            BELUNI · MINHA CONTA
+        </span>
 
-        <h2>Perfil do estudante</h2>
+        <h1 class="perfil-titulo">
+            Meu perfil
+        </h1>
 
-        <p class="text-muted">
-            Consulte seus dados pessoais e mantenha seu perfil atualizado.
+        <p class="perfil-descricao">
+            Confira seus dados pessoais e mantenha seu perfil atualizado.
         </p>
     </div>
 
-    <div class="card border-0 shadow-sm rounded-4 p-4">
 
-        <div class="text-center mb-4">
+    <div class="perfil-card">
 
-            <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
-                 style="width: 80px; height: 80px; background-color: #eadfc9; color: #20494a; font-size: 28px; font-weight: bold;">
+        <!-- IDENTIFICAÇÃO -->
+        <div class="d-flex align-items-center gap-3 mb-4">
 
+            <div class="perfil-avatar">
                 {{ estudante.first_name|default:estudante.username|first|upper }}
-
             </div>
 
-            <h4 class="fw-bold">
-                {{ estudante.get_full_name|default:estudante.username }}
-            </h4>
+            <div>
+                <h4 class="perfil-nome mb-1">
+                    {{ estudante.get_full_name|default:estudante.username }}
+                </h4>
 
-            <p class="text-muted">
-                Perfil do Beluni
-            </p>
+                <span class="text-secondary">
+                    Perfil do Beluni
+                </span>
+            </div>
 
         </div>
 
         <hr>
 
+
+        <!-- DADOS DO ESTUDANTE -->
         <div class="row g-4 py-3">
 
-            <div class="col-md-6">
-                <small class="text-muted">Nome completo</small>
-                <p class="fw-semibold">
+            <div class="col-md-6 perfil-dado">
+                <small>Nome completo</small>
+                <p>
                     {{ estudante.get_full_name|default:estudante.username }}
                 </p>
             </div>
 
-            <div class="col-md-6">
-                <small class="text-muted">Nome de usuário</small>
-                <p class="fw-semibold">
+            <div class="col-md-6 perfil-dado">
+                <small>Nome de usuário</small>
+                <p>
                     {{ estudante.username }}
                 </p>
             </div>
 
-            <div class="col-md-6">
-                <small class="text-muted">E-mail</small>
-                <p class="fw-semibold">
+            <div class="col-md-6 perfil-dado">
+                <small>E-mail</small>
+                <p>
                     {{ estudante.email|default:"Não informado" }}
                 </p>
             </div>
 
-            <div class="col-md-6">
-                <small class="text-muted">CPF</small>
-                <p class="fw-semibold">
+            <div class="col-md-6 perfil-dado">
+                <small>CPF</small>
+                <p>
                     {{ estudante.cpf|default:"Não informado" }}
                 </p>
             </div>
@@ -74,33 +285,115 @@
 
         <hr>
 
-        <div class="d-flex flex-wrap gap-2 mt-2">
+
+        <!-- BOTÕES PRINCIPAIS -->
+        <div class="perfil-acoes">
 
             <a href="{% url 'editar_meu_perfil' %}"
-               class="btn btn-success">
-                Editar meu perfil
+               class="btn-perfil">
+                ✎ Editar perfil
             </a>
 
             {% if eh_administrador %}
 
                 <a href="{% url 'inicio' %}"
-                   class="btn btn-outline-secondary">
-                    Voltar ao painel administrativo
+                   class="btn-voltar">
+                    Voltar ao painel
                 </a>
 
             {% else %}
 
                 <a href="{% url 'listar_atividades' %}"
-                   class="btn btn-outline-secondary">
-                    Voltar para atividades
+                   class="btn-voltar">
+                    Voltar ao início
                 </a>
 
             {% endif %}
 
         </div>
 
+
+        <!-- EXCLUSÃO DA CONTA -->
+        <div class="exclusao-area">
+
+            <button type="button"
+                    class="btn-excluir"
+                    onclick="mostrarConfirmacao()">
+                🗑 Excluir meu perfil
+            </button>
+
+
+            <!-- APARECE SOMENTE AO CLICAR -->
+            <div id="confirmacaoExclusao"
+                 class="confirmacao-exclusao">
+
+                <h5>Confirmar exclusão da conta</h5>
+
+                <p class="text-secondary">
+                    Essa ação é permanente. Para confirmar que você é
+                    o proprietário da conta, digite sua senha atual.
+                </p>
+
+                <form method="POST"
+                      action="{% url 'excluir_meu_perfil' %}">
+
+                    {% csrf_token %}
+
+                    <label for="senha_exclusao" class="fw-semibold">
+                        Senha atual
+                    </label>
+
+                    <input
+                        type="password"
+                        id="senha_exclusao"
+                        name="senha_exclusao"
+                        placeholder="Digite sua senha"
+                        required
+                        autocomplete="current-password"
+                    >
+
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+
+                        <button type="submit"
+                                class="btn-confirmar-exclusao">
+                            Confirmar exclusão
+                        </button>
+
+                        <button type="button"
+                                class="btn-cancelar-exclusao"
+                                onclick="ocultarConfirmacao()">
+                            Cancelar
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
     </div>
 
 </div>
+
+
+<script>
+    function mostrarConfirmacao() {
+        const area = document.getElementById('confirmacaoExclusao');
+
+        area.classList.add('ativo');
+
+        document.getElementById('senha_exclusao').focus();
+    }
+
+    function ocultarConfirmacao() {
+        const area = document.getElementById('confirmacaoExclusao');
+
+        area.classList.remove('ativo');
+
+        document.getElementById('senha_exclusao').value = '';
+    }
+</script>
 
 {% endblock %}

@@ -11,4 +11,7 @@ urlpatterns = [
     path('<int:id>/', views.detalhar_estudante, name='detalhar_estudante'),
     path('<int:id>/editar/', views.editar_estudante, name='editar_estudante'),
     path('<int:id>/excluir/', views.excluir_estudante, name='excluir_estudante'),
+    path('<int:id>/tornar-administrador/', views.tornar_administrador, name='tornar_administrador'),
+    path('<int:id>/tornar-estudante/', views.tornar_estudante, name='tornar_estudante'),
+    path('meu-perfil/excluir/', views.excluir_meu_perfil, name='excluir_meu_perfil'),
 ]
