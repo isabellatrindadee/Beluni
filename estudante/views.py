@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 from django.contrib import messages
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from django.views.decorators.http import require_POST
 
 from .models import Estudante
@@ -97,26 +97,54 @@ def criar_estudante(request):
     })
 
 
-# LISTAR ESTUDANTES
+# LISTAR ESTUDANTES E ADMINISTRADORES
 @login_required
 @user_passes_test(
     usuario_e_administrador,
     login_url='login_estudante'
 )
-@permission_required('estudante.change_estudante', raise_exception=True)
 def listar_estudantes(request):
 
-    estudantes = Estudante.objects.all()
-
-    administradores_ids = Estudante.objects.filter(
+    # Lista os estudantes que não pertencem ao grupo Administrador
+    estudantes = Estudante.objects.exclude(
         groups__name='Administrador'
-    ).values_list('id', flat=True)
+    ).distinct().order_by('nome')
+
+    # Busca todos os administradores
+    usuarios_admin = User.objects.filter(
+        groups__name='Administrador'
+    ).distinct().order_by('username')
+
+    # Recupera os perfis associados aos administradores
+    perfis_admin = {
+        estudante.pk: estudante
+        for estudante in Estudante.objects.filter(
+            pk__in=usuarios_admin.values_list('pk', flat=True)
+        )
+    }
+
+    administradores = []
+
+    for usuario in usuarios_admin:
+        perfil = perfis_admin.get(usuario.pk)
+
+        administradores.append({
+            'usuario': usuario,
+            'nome': (
+                perfil.nome
+                if perfil
+                else usuario.get_full_name() or usuario.username
+            ),
+            'cpf': perfil.cpf if perfil else '',
+            'possui_perfil': False,
+        })
 
     return render(request, 'estudante/listar.html', {
         'estudantes': estudantes,
-        'administradores_ids': administradores_ids
+        'administradores': administradores,
+        'total_estudantes': estudantes.count(),
+        'total_administradores': len(administradores),
     })
-
 
 # DETALHAR ESTUDANTE
 @login_required

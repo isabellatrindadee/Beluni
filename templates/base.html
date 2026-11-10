@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -377,125 +378,38 @@
 
         {% if request.user.is_authenticated %}
 
-            {% if request.user.is_superuser or request.user.groups.filter %}
+            {% if request.user.is_superuser or request.user.is_staff or request.session.is_admin or perms.estudante.change_estudante %}
 
-                {% if request.user.is_superuser %}
+                <!-- MENU DO ADMINISTRADOR -->
 
-                    <!-- MENU DO ADMINISTRADOR -->
+                <div class="sidebar-label">
+                    Menu do administrador
+                </div>
 
-                    <div class="sidebar-label">
-                        Menu do administrador
-                    </div>
+                <ul class="sidebar-nav">
 
-                    <ul class="sidebar-nav">
-                        <li>
-                            <a class="menu-link" href="{% url 'inicio' %}">
-                                <span class="menu-icone">📊</span>
-                                Painel administrativo
-                            </a>
-                        </li>
+                    <li>
+                        <a class="menu-link" href="{% url 'inicio' %}">
+                            <span class="menu-icone">📊</span>
+                            Painel administrativo
+                        </a>
+                    </li>
 
-                        <li>
-                            <a class="menu-link" href="{% url 'listar_estudantes' %}">
-                                <span class="menu-icone">👥</span>
-                                Gerenciar estudantes
-                            </a>
-                        </li>
+                    <li>
+                        <a class="menu-link" href="{% url 'index' %}">
+                            <span class="menu-icone">🌐</span>
+                            Página pública
+                        </a>
+                    </li>
 
-                        <li>
-                            <a class="menu-link" href="{% url 'index' %}">
-                                <span class="menu-icone">🌐</span>
-                                Página pública
-                            </a>
-                        </li>
-                    </ul>
+                    <li>
+                        <a class="menu-link" href="{% url 'listar_estudantes' %}">
+                            <span class="menu-icone">👥</span>
+                            Gerenciar usuários
+                        </a>
+                    </li>
 
-                {% else %}
-
-                    {% if request.session.is_admin %}
-
-                        <div class="sidebar-label">
-                            Menu do administrador
-                        </div>
-
-                        <ul class="sidebar-nav">
-                            <li>
-                                <a class="menu-link" href="{% url 'inicio' %}">
-                                    <span class="menu-icone">📊</span>
-                                    Painel administrativo
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="menu-link" href="{% url 'listar_estudantes' %}">
-                                    <span class="menu-icone">👥</span>
-                                    Gerenciar estudantes
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="menu-link" href="{% url 'index' %}">
-                                    <span class="menu-icone">🌐</span>
-                                    Página pública
-                                </a>
-                            </li>
-                        </ul>
-
-                    {% else %}
-
-                        <!-- MENU DO ESTUDANTE -->
-
-                        <div class="sidebar-label">
-                            Menu do estudante
-                        </div>
-
-                        <ul class="sidebar-nav">
-                            <li>
-                                <a class="menu-link" href="{% url 'inicio' %}">
-                                    <span class="menu-icone">🏠</span>
-                                    Início
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="menu-link" href="{% url 'listar_disciplinas' %}">
-                                    <span class="menu-icone">📚</span>
-                                    Disciplinas
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="menu-link" href="{% url 'listar_atividades' %}">
-                                    <span class="menu-icone">📝</span>
-                                    Atividades
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="menu-link" href="{% url 'listar_metas' %}">
-                                    <span class="menu-icone">🎯</span>
-                                    Metas
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="menu-link" href="{% url 'notificacao:listar_notificacoes' %}">
-                                    <span class="menu-icone">🔔</span>
-                                    Notificações
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="menu-link" href="{% url 'meu_perfil' %}">
-                                    <span class="menu-icone">👤</span>
-                                    Meu perfil
-                                </a>
-                            </li>
-                        </ul>
-
-                    {% endif %}
-
-                {% endif %}
+                </ul>
 
             {% else %}
 
@@ -506,6 +420,7 @@
                 </div>
 
                 <ul class="sidebar-nav">
+
                     <li>
                         <a class="menu-link" href="{% url 'inicio' %}">
                             <span class="menu-icone">🏠</span>
@@ -547,6 +462,7 @@
                             Meu perfil
                         </a>
                     </li>
+
                 </ul>
 
             {% endif %}
@@ -556,17 +472,19 @@
             <div class="sidebar-rodape">
 
                 <div class="usuario-info">
+
                     Conectado como
 
                     <strong>
                         {{ request.user.first_name|default:request.user.username }}
                     </strong>
 
-                    {% if request.user.is_superuser or request.session.is_admin %}
+                    {% if request.user.is_superuser or request.user.is_staff or request.session.is_admin or perms.estudante.change_estudante %}
                         <small>Administrador</small>
                     {% else %}
                         <small>Estudante</small>
                     {% endif %}
+
                 </div>
 
                 <a class="btn-sair" href="{% url 'logout_estudante' %}">
