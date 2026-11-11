@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% block titulo %}Dashboard administrativo | Beluni{% endblock %}
@@ -8,7 +9,6 @@
 
     <!-- CABEÇALHO -->
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-
         <div>
             <span class="small text-uppercase fw-bold"
                   style="color: #758080; letter-spacing: 2px;">
@@ -24,20 +24,15 @@
             </p>
         </div>
 
-        <a href="{% url 'listar_estudantes' %}"
-           class="btn btn-primary">
-            + Gerenciar estudantes
+        <a href="{% url 'listar_estudantes' %}" class="btn btn-primary">
+            + Gerenciar usuários
         </a>
-
     </div>
-
 
     <!-- BOAS-VINDAS -->
     <div class="card border-0 mb-4"
          style="background: linear-gradient(135deg, #173839, #326564); color: white;">
-
         <div class="card-body p-4 p-md-5">
-
             <span class="small text-uppercase"
                   style="letter-spacing: 1.5px; color: #E8DDC8;">
                 VISÃO GERAL DO SISTEMA
@@ -50,172 +45,100 @@
 
             <p class="mb-0">
                 Bem-vindo ao painel administrativo. Aqui você pode
-                acompanhar os estudantes cadastrados e visualizar
-                os números gerais da plataforma.
+                acompanhar os estudantes e administradores cadastrados
+                e visualizar os números gerais da plataforma.
             </p>
-
         </div>
-
     </div>
-
 
     <!-- INDICADORES -->
     <div class="row g-3 mb-4">
 
-        <!-- ESTUDANTES -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="card h-100">
                 <div class="card-body p-4">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-                            <p class="text-secondary mb-2">
-                                Estudantes cadastrados
-                            </p>
-
-                            <h2 class="fw-bold mb-0"
-                                style="color: #20494A;">
-                                {{ total_estudantes }}
-                            </h2>
-                        </div>
-
-                        <div class="rounded-3 d-flex align-items-center justify-content-center"
-                             style="width: 52px; height: 52px; background: #E8DDC8; color: #20494A; font-size: 1.5rem;">
-                            ♙
-                        </div>
-
-                    </div>
-
+                    <p class="text-secondary mb-2">Estudantes cadastrados</p>
+                    <h2 class="fw-bold mb-0" style="color: #20494A;">
+                        {{ total_estudantes }}
+                    </h2>
                     <a href="{% url 'listar_estudantes' %}"
                        class="btn btn-outline-primary btn-sm mt-3">
                         Ver estudantes
                     </a>
-
                 </div>
             </div>
         </div>
 
-
-        <!-- DISCIPLINAS -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="card h-100">
                 <div class="card-body p-4">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-                            <p class="text-secondary mb-2">
-                                Disciplinas
-                            </p>
-
-                            <h2 class="fw-bold mb-0"
-                                style="color: #20494A;">
-                                {{ total_disciplinas }}
-                            </h2>
-                        </div>
-
-                        <div class="rounded-3 d-flex align-items-center justify-content-center"
-                             style="width: 52px; height: 52px; background: #DCE9E5; color: #20494A; font-size: 1.5rem;">
-                            ▤
-                        </div>
-
-                    </div>
-
-                    <p class="small text-secondary mt-3 mb-0">
-                        Total cadastrado na plataforma.
-                    </p>
-
+                    <p class="text-secondary mb-2">Administradores</p>
+                    <h2 class="fw-bold mb-0" style="color: #20494A;">
+                        {{ total_administradores }}
+                    </h2>
+                    <a href="{% url 'listar_estudantes' %}"
+                       class="btn btn-outline-primary btn-sm mt-3">
+                        Ver administradores
+                    </a>
                 </div>
             </div>
         </div>
 
-
-        <!-- ATIVIDADES -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="card h-100">
                 <div class="card-body p-4">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-                            <p class="text-secondary mb-2">
-                                Atividades
-                            </p>
-
-                            <h2 class="fw-bold mb-0"
-                                style="color: #20494A;">
-                                {{ total_atividades }}
-                            </h2>
-                        </div>
-
-                        <div class="rounded-3 d-flex align-items-center justify-content-center"
-                             style="width: 52px; height: 52px; background: #F6E8CB; color: #20494A; font-size: 1.5rem;">
-                            ▦
-                        </div>
-
-                    </div>
-
+                    <p class="text-secondary mb-2">Disciplinas</p>
+                    <h2 class="fw-bold mb-0" style="color: #20494A;">
+                        {{ total_disciplinas }}
+                    </h2>
                     <p class="small text-secondary mt-3 mb-0">
                         Total cadastrado na plataforma.
                     </p>
-
                 </div>
             </div>
         </div>
 
-
-        <!-- METAS -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="card h-100">
                 <div class="card-body p-4">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-                            <p class="text-secondary mb-2">
-                                Metas
-                            </p>
-
-                            <h2 class="fw-bold mb-0"
-                                style="color: #20494A;">
-                                {{ total_metas }}
-                            </h2>
-                        </div>
-
-                        <div class="rounded-3 d-flex align-items-center justify-content-center"
-                             style="width: 52px; height: 52px; background: #E8E0EB; color: #20494A; font-size: 1.5rem;">
-                            ◎
-                        </div>
-
-                    </div>
-
+                    <p class="text-secondary mb-2">Atividades</p>
+                    <h2 class="fw-bold mb-0" style="color: #20494A;">
+                        {{ total_atividades }}
+                    </h2>
                     <p class="small text-secondary mt-3 mb-0">
                         Total cadastrado na plataforma.
                     </p>
+                </div>
+            </div>
+        </div>
 
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body p-4">
+                    <p class="text-secondary mb-2">Metas</p>
+                    <h2 class="fw-bold mb-0" style="color: #20494A;">
+                        {{ total_metas }}
+                    </h2>
+                    <p class="small text-secondary mt-3 mb-0">
+                        Total cadastrado na plataforma.
+                    </p>
                 </div>
             </div>
         </div>
 
     </div>
 
-
     <!-- ESTUDANTES RECENTES -->
     <div class="card border-0 shadow-sm mb-4">
-
         <div class="card-body p-0">
 
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 p-4">
-
                 <div>
-                    <h2 class="h5 fw-bold mb-1"
-                        style="color: #20494A;">
+                    <h2 class="h5 fw-bold mb-1" style="color: #20494A;">
                         Estudantes cadastrados
                     </h2>
-
                     <p class="text-secondary small mb-0">
-                        Veja os últimos estudantes registrados na plataforma.
+                        Últimos estudantes registrados na plataforma.
                     </p>
                 </div>
 
@@ -223,13 +146,10 @@
                    class="btn btn-outline-primary btn-sm">
                     Ver todos
                 </a>
-
             </div>
 
             <div class="table-responsive">
-
                 <table class="table table-hover align-middle mb-0">
-
                     <thead>
                         <tr>
                             <th class="ps-4">Estudante</th>
@@ -241,158 +161,172 @@
                     </thead>
 
                     <tbody>
-
                         {% for estudante in estudantes_recentes %}
-
-                            <tr>
-
-                                <td class="ps-4">
-
-                                    <div class="d-flex align-items-center gap-3">
-
-                                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                                             style="width: 40px; height: 40px; background: #E8DDC8; color: #20494A; font-weight: 700;">
-
-                                            {{ estudante.nome|first|upper }}
-
-                                        </div>
-
-                                        <div>
-                                            <div class="fw-semibold">
-                                                {{ estudante.nome }}
-                                            </div>
-
-                                            <small class="text-secondary">
-                                                ID: {{ estudante.pk }}
-                                            </small>
-                                        </div>
-
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                         style="width: 40px; height: 40px; background: #E8DDC8; color: #20494A; font-weight: 700;">
+                                        {{ estudante.nome|first|upper }}
                                     </div>
+                                    <div>
+                                        <div class="fw-semibold">
+                                            {{ estudante.nome }}
+                                        </div>
+                                        <small class="text-secondary">
+                                            ID: {{ estudante.pk }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </td>
 
-                                </td>
+                            <td>{{ estudante.username }}</td>
+                            <td>{{ estudante.email|default:"Não informado" }}</td>
+                            <td>{{ estudante.date_joined|date:"d/m/Y" }}</td>
 
-                                <td>
-                                    {{ estudante.username }}
-                                </td>
-
-                                <td>
-                                    {{ estudante.email|default:"Não informado" }}
-                                </td>
-
-                                <td>
-                                    {{ estudante.date_joined|date:"d/m/Y" }}
-                                </td>
-
-                                <td class="text-end pe-4">
-
-                                    <a href="{% url 'detalhar_estudante' estudante.pk %}"
-                                       class="btn btn-sm btn-outline-primary">
-                                        Ver perfil
-                                    </a>
-
-                                </td>
-
-                            </tr>
+                            <td class="text-end pe-4">
+                                <a href="{% url 'detalhar_estudante' estudante.pk %}"
+                                   class="btn btn-sm btn-outline-primary">
+                                    Ver perfil
+                                </a>
+                            </td>
+                        </tr>
 
                         {% empty %}
-
-                            <tr>
-                                <td colspan="5"
-                                    class="text-center text-secondary py-5">
-
-                                    <div class="mb-2"
-                                         style="font-size: 2rem;">
-                                        ♙
-                                    </div>
-
-                                    <p class="fw-semibold mb-1">
-                                        Nenhum estudante cadastrado.
-                                    </p>
-
-                                    <p class="small mb-3">
-                                        Quando houver estudantes registrados, eles aparecerão aqui.
-                                    </p>
-
-                                    <a href="{% url 'criar_estudante' %}"
-                                       class="btn btn-primary btn-sm">
-                                        Cadastrar estudante
-                                    </a>
-
-                                </td>
-                            </tr>
-
+                        <tr>
+                            <td colspan="5"
+                                class="text-center text-secondary py-5">
+                                Nenhum estudante cadastrado.
+                            </td>
+                        </tr>
                         {% endfor %}
-
                     </tbody>
-
                 </table>
-
             </div>
 
             <div class="p-3 px-4"
                  style="border-top: 1px solid #E5E2D9;">
-
                 <span class="small text-secondary">
                     Exibindo até 8 estudantes cadastrados mais recentemente.
                 </span>
-
             </div>
-
         </div>
-
     </div>
 
+    <!-- ADMINISTRADORES RECENTES -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-0">
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 p-4">
+                <div>
+                    <h2 class="h5 fw-bold mb-1" style="color: #20494A;">
+                        Administradores cadastrados
+                    </h2>
+                    <p class="text-secondary small mb-0">
+                        Últimos administradores registrados na plataforma.
+                    </p>
+                </div>
+
+                <a href="{% url 'listar_estudantes' %}"
+                   class="btn btn-outline-primary btn-sm">
+                    Ver todos
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Administrador</th>
+                            <th>Nome de usuário</th>
+                            <th>E-mail</th>
+                            <th>Cadastro</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for administrador in administradores_recentes %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                         style="width: 40px; height: 40px; background: #DCE9E5; color: #20494A; font-weight: 700;">
+                                        {{ administrador.get_full_name|default:administrador.username|first|upper }}
+                                    </div>
+
+                                    <div>
+                                        <div class="fw-semibold">
+                                            {{ administrador.get_full_name|default:administrador.username }}
+                                        </div>
+                                        <small class="text-secondary">
+                                            ID: {{ administrador.pk }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>{{ administrador.username }}</td>
+                            <td>{{ administrador.email|default:"Não informado" }}</td>
+                            <td>{{ administrador.date_joined|date:"d/m/Y" }}</td>
+                        </tr>
+
+                        {% empty %}
+                        <tr>
+                            <td colspan="4"
+                                class="text-center text-secondary py-5">
+                                Nenhum administrador cadastrado.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="p-3 px-4"
+                 style="border-top: 1px solid #E5E2D9;">
+                <span class="small text-secondary">
+                    Exibindo até 8 administradores cadastrados mais recentemente.
+                </span>
+            </div>
+        </div>
+    </div>
 
     <!-- ACESSOS RÁPIDOS -->
     <div class="row g-3">
 
         <div class="col-12 col-md-6">
-
             <div class="card h-100">
                 <div class="card-body p-4">
-
-                    <h3 class="h6 fw-bold"
-                        style="color: #20494A;">
-                        Gerenciamento de estudantes
+                    <h3 class="h6 fw-bold" style="color: #20494A;">
+                        Gerenciamento de usuários
                     </h3>
-
                     <p class="text-secondary small">
-                        Consulte os cadastros e acesse as opções de
-                        visualização, edição e exclusão.
+                        Consulte estudantes e administradores e acesse
+                        as opções de gerenciamento.
                     </p>
-
                     <a href="{% url 'listar_estudantes' %}"
                        class="btn btn-primary">
                         Abrir listagem
                     </a>
-
                 </div>
             </div>
-
         </div>
 
         <div class="col-12 col-md-6">
-
             <div class="card h-100">
                 <div class="card-body p-4">
-
-                    <h3 class="h6 fw-bold"
-                        style="color: #20494A;">
+                    <h3 class="h6 fw-bold" style="color: #20494A;">
                         Página pública
                     </h3>
-
                     <p class="text-secondary small">
                         Acesse a página pública de apresentação do Beluni.
                     </p>
-
                     <a href="{% url 'index' %}"
                        class="btn btn-outline-primary">
                         Ver página pública
                     </a>
-
                 </div>
             </div>
-
         </div>
 
     </div>

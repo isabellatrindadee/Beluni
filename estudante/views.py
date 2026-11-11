@@ -1,8 +1,14 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+from django.contrib.auth.decorators import (
+    login_required,
+    user_passes_test,
+    permission_required,
+)
 from django.contrib import messages
 from django.contrib.auth.models import Group, User
+from django.db.models import Q
 from django.views.decorators.http import require_POST
 
 from .models import Estudante
@@ -105,17 +111,20 @@ def criar_estudante(request):
 )
 def listar_estudantes(request):
 
-    # Lista os estudantes que não pertencem ao grupo Administrador
+    # Estudantes que não pertencem ao grupo Administrador
     estudantes = Estudante.objects.exclude(
         groups__name='Administrador'
+    ).exclude(
+        is_superuser=True
     ).distinct().order_by('nome')
 
-    # Busca todos os administradores
+    # Administradores, incluindo superusuários
     usuarios_admin = User.objects.filter(
-        groups__name='Administrador'
+        Q(groups__name='Administrador') | Q(is_superuser=True)
     ).distinct().order_by('username')
 
-    # Recupera os perfis associados aos administradores
+    # Recuperar os perfis associados aos administradores,
+    # caso existam
     perfis_admin = {
         estudante.pk: estudante
         for estudante in Estudante.objects.filter(
@@ -136,7 +145,7 @@ def listar_estudantes(request):
                 else usuario.get_full_name() or usuario.username
             ),
             'cpf': perfil.cpf if perfil else '',
-            'possui_perfil': False,
+            'possui_perfil': perfil is not None,
         })
 
     return render(request, 'estudante/listar.html', {
@@ -145,6 +154,7 @@ def listar_estudantes(request):
         'total_estudantes': estudantes.count(),
         'total_administradores': len(administradores),
     })
+
 
 # DETALHAR ESTUDANTE
 @login_required
@@ -155,7 +165,7 @@ def listar_estudantes(request):
 def detalhar_estudante(request, id):
 
     estudante = get_object_or_404(
-        Estudante,
+        Estudante.objects.exclude(groups__name='Administrador'),
         pk=id
     )
 
@@ -173,7 +183,7 @@ def detalhar_estudante(request, id):
 def editar_estudante(request, id):
 
     estudante = get_object_or_404(
-        Estudante,
+        Estudante.objects.exclude(groups__name='Administrador'),
         pk=id
     )
 
@@ -221,7 +231,7 @@ def editar_estudante(request, id):
 def excluir_estudante(request, id):
 
     estudante = get_object_or_404(
-        Estudante,
+        Estudante.objects.exclude(groups__name='Administrador'),
         pk=id
     )
 
@@ -324,18 +334,47 @@ def editar_meu_perfil(request):
 @login_required
 def inicio(request):
 
+    # ==========================================
+    # PAINEL ADMINISTRATIVO
+    # ==========================================
     if usuario_e_administrador(request.user):
 
-        estudantes_recentes = Estudante.objects.order_by(
+        # Buscar estudantes, excluindo administradores
+        estudantes_recentes = Estudante.objects.exclude(
+            groups__name='Administrador'
+        ).exclude(
+            is_superuser=True
+        ).distinct().order_by('-date_joined')[:8]
+
+        # Buscar todos os administradores
+        administradores = User.objects.filter(
+            Q(groups__name='Administrador') | Q(is_superuser=True)
+        ).distinct().order_by('username')
+
+        # Administradores mais recentes
+        administradores_recentes = administradores.order_by(
             '-date_joined'
         )[:8]
 
+        # Totais
+        total_estudantes = Estudante.objects.exclude(
+            groups__name='Administrador'
+        ).exclude(
+            is_superuser=True
+        ).distinct().count()
+
+        total_administradores = administradores.count()
+
         contexto = {
-            'total_estudantes': Estudante.objects.count(),
+            'total_estudantes': total_estudantes,
+            'total_administradores': total_administradores,
             'total_disciplinas': Disciplina.objects.count(),
             'total_atividades': Atividade.objects.count(),
             'total_metas': Meta.objects.count(),
+
             'estudantes_recentes': estudantes_recentes,
+            'administradores': administradores,
+            'administradores_recentes': administradores_recentes,
         }
 
         return render(
@@ -344,11 +383,16 @@ def inicio(request):
             contexto
         )
 
+    # ==========================================
+    # PAINEL DO ESTUDANTE
+    # ==========================================
+
     estudante = Estudante.objects.filter(
         pk=request.user.pk
     ).first()
 
     if estudante:
+
         disciplinas = Disciplina.objects.filter(
             estudante=estudante
         ).order_by('nomedisciplina')
@@ -391,7 +435,7 @@ def index(request):
 def tornar_administrador(request, id):
 
     estudante = get_object_or_404(
-        Estudante,
+        Estudante.objects.exclude(groups__name='Administrador'),
         pk=id
     )
 
@@ -405,23 +449,13 @@ def tornar_administrador(request, id):
         name='estudante'
     )
 
-    if estudante.groups.filter(
-        pk=grupo_administrador.pk
-    ).exists():
+    estudante.groups.remove(grupo_estudante)
+    estudante.groups.add(grupo_administrador)
 
-        messages.info(
-            request,
-            'Este usuário já é administrador.'
-        )
-
-    else:
-        estudante.groups.remove(grupo_estudante)
-        estudante.groups.add(grupo_administrador)
-
-        messages.success(
-            request,
-            f'{estudante.username} agora é administrador!'
-        )
+    messages.success(
+        request,
+        f'{estudante.username} agora é administrador!'
+    )
 
     return redirect('listar_estudantes')
 
@@ -455,6 +489,15 @@ def tornar_estudante(request, id):
         name='Administrador'
     )
 
+    if not estudante.groups.filter(
+        pk=grupo_administrador.pk
+    ).exists():
+        messages.info(
+            request,
+            'Este usuário não pertence ao grupo Administrador.'
+        )
+        return redirect('listar_estudantes')
+
     estudante.groups.remove(grupo_administrador)
     estudante.groups.add(grupo_estudante)
 
@@ -466,24 +509,24 @@ def tornar_estudante(request, id):
     return redirect('listar_estudantes')
 
 
+# EXCLUIR MEU PERFIL
 @login_required
 @require_POST
 def excluir_meu_perfil(request):
+
     senha = request.POST.get('senha_exclusao')
 
     if not senha or not request.user.check_password(senha):
         messages.error(
             request,
-            'Senha incorreta. Seu perfil não foi excluído.'
+            'Senha incorreta. Sua conta não foi excluída.'
         )
         return redirect('meu_perfil')
 
     usuario = request.user
 
-    # Exclui a conta e os registros associados pelo Django.
     usuario.delete()
 
-    # Encerra a sessão.
     logout(request)
 
     messages.success(
