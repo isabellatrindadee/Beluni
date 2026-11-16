@@ -14,4 +14,5 @@ urlpatterns = [
     path('<int:id>/tornar-administrador/', views.tornar_administrador, name='tornar_administrador'),
     path('<int:id>/tornar-estudante/', views.tornar_estudante, name='tornar_estudante'),
     path('meu-perfil/excluir/', views.excluir_meu_perfil, name='excluir_meu_perfil'),
+    path('<int:id>/alterar-senha/', views.alterar_senha_usuario, name='alterar_senha_usuario'),
 ]

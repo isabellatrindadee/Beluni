@@ -115,6 +115,12 @@
                                     Editar
                                 </a>
 
+                                <!-- ALTERAR SENHA -->
+                                <a href="{% url 'alterar_senha_usuario' estudante.id %}"
+                                   class="btn btn-sm btn-outline-primary rounded-3">
+                                    Alterar senha
+                                </a>
+
                                 <form method="POST"
                                       action="{% url 'tornar_administrador' estudante.id %}"
                                       onsubmit="return confirm('Deseja realmente tornar este estudante administrador?');">
@@ -202,18 +208,28 @@
                         </td>
 
                         <td>
-                            <form method="POST"
-                                  action="{% url 'tornar_estudante' administrador.usuario.id %}"
-                                  onsubmit="return confirm('Deseja retirar o acesso administrativo deste usuário?');">
+                            <div class="d-flex flex-wrap gap-2">
 
-                                {% csrf_token %}
+                                <!-- ALTERAR SENHA -->
+                                <a href="{% url 'alterar_senha_usuario' administrador.usuario.id %}"
+                                   class="btn btn-sm btn-outline-primary rounded-3">
+                                    Alterar senha
+                                </a>
 
-                                <button type="submit"
-                                        class="btn btn-sm btn-outline-danger rounded-3">
-                                    Tornar estudante
-                                </button>
+                                <form method="POST"
+                                      action="{% url 'tornar_estudante' administrador.usuario.id %}"
+                                      onsubmit="return confirm('Deseja retirar o acesso administrativo deste usuário?');">
 
-                            </form>
+                                    {% csrf_token %}
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-danger rounded-3">
+                                        Tornar estudante
+                                    </button>
+
+                                </form>
+
+                            </div>
                         </td>
 
                     </tr>

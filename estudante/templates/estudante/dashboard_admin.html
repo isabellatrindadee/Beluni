@@ -156,7 +156,7 @@
                             <th>Nome de usuário</th>
                             <th>E-mail</th>
                             <th>Cadastro</th>
-                            <th class="text-end pe-4">Ação</th>
+                            <th class="text-end pe-4">Ações</th>
                         </tr>
                     </thead>
 
@@ -169,6 +169,7 @@
                                          style="width: 40px; height: 40px; background: #E8DDC8; color: #20494A; font-weight: 700;">
                                         {{ estudante.nome|first|upper }}
                                     </div>
+
                                     <div>
                                         <div class="fw-semibold">
                                             {{ estudante.nome }}
@@ -185,10 +186,19 @@
                             <td>{{ estudante.date_joined|date:"d/m/Y" }}</td>
 
                             <td class="text-end pe-4">
-                                <a href="{% url 'detalhar_estudante' estudante.pk %}"
-                                   class="btn btn-sm btn-outline-primary">
-                                    Ver perfil
-                                </a>
+                                <div class="d-flex justify-content-end flex-wrap gap-2">
+
+                                    <a href="{% url 'detalhar_estudante' estudante.pk %}"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Ver perfil
+                                    </a>
+
+                                    <a href="{% url 'alterar_senha_usuario' estudante.pk %}"
+                                       class="btn btn-sm btn-outline-secondary">
+                                        Alterar senha
+                                    </a>
+
+                                </div>
                             </td>
                         </tr>
 
@@ -241,6 +251,7 @@
                             <th>Nome de usuário</th>
                             <th>E-mail</th>
                             <th>Cadastro</th>
+                            <th class="text-end pe-4">Ações</th>
                         </tr>
                     </thead>
 
@@ -268,11 +279,18 @@
                             <td>{{ administrador.username }}</td>
                             <td>{{ administrador.email|default:"Não informado" }}</td>
                             <td>{{ administrador.date_joined|date:"d/m/Y" }}</td>
+
+                            <td class="text-end pe-4">
+                                <a href="{% url 'alterar_senha_usuario' administrador.pk %}"
+                                   class="btn btn-sm btn-outline-secondary">
+                                    Alterar senha
+                                </a>
+                            </td>
                         </tr>
 
                         {% empty %}
                         <tr>
-                            <td colspan="4"
+                            <td colspan="5"
                                 class="text-center text-secondary py-5">
                                 Nenhum administrador cadastrado.
                             </td>

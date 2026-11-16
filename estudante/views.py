@@ -21,6 +21,7 @@ from .forms import (
 from disciplinas.models import Disciplina
 from atividade.models import Atividade
 from meta.models import Meta
+from django.contrib.auth.forms import SetPasswordForm
 
 
 # VERIFICAR SE É ADMINISTRADOR
@@ -221,6 +222,47 @@ def editar_estudante(request, id):
         'estudante': estudante
     })
 
+
+# ALTERAR SENHA DE USUÁRIO PELO ADMINISTRADOR
+@login_required
+@user_passes_test(
+    usuario_e_administrador,
+    login_url='login_estudante'
+)
+def alterar_senha_usuario(request, id):
+
+    usuario = get_object_or_404(
+        User,
+        pk=id
+    )
+
+    if request.method == 'POST':
+        form = SetPasswordForm(
+            usuario,
+            request.POST
+        )
+
+        if form.is_valid():
+            form.save()
+
+            messages.success(
+                request,
+                f'A senha de {usuario.username} foi alterada com sucesso!'
+            )
+
+            return redirect('listar_estudantes')
+
+    else:
+        form = SetPasswordForm(usuario)
+
+    return render(
+        request,
+        'estudante/alterar_senha.html',
+        {
+            'form': form,
+            'usuario': usuario
+        }
+    )
 
 # EXCLUIR ESTUDANTE
 @login_required

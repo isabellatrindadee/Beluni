@@ -1,0 +1,104 @@
+
+{% extends 'base.html' %}
+
+{% block titulo %}Alterar senha | Beluni{% endblock %}
+
+{% block conteudo %}
+
+<div class="container py-5" style="max-width: 750px;">
+
+    <div class="mb-4">
+        <a href="{% url 'listar_estudantes' %}"
+           class="btn btn-outline-secondary mb-4">
+            ← Voltar para usuários
+        </a>
+
+        <p class="text-uppercase small fw-bold mb-2"
+           style="color: #758080; letter-spacing: 1.5px;">
+            GERENCIAMENTO
+        </p>
+
+        <h1 class="titulo-pagina mb-2">
+            Alterar senha
+        </h1>
+
+        <p class="text-secondary">
+            Defina uma nova senha para o usuário
+            <strong>{{ usuario.username }}</strong>.
+        </p>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {% for field in form %}
+
+                    <div class="mb-4">
+
+                        <label for="{{ field.id_for_label }}"
+                               class="form-label fw-semibold">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                        {% if field.help_text %}
+                            <div class="form-text">
+                                {{ field.help_text|safe }}
+                            </div>
+                        {% endif %}
+
+                        {% for error in field.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                {% endfor %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <hr>
+
+                <div class="d-flex flex-wrap gap-2">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Salvar nova senha
+                    </button>
+
+                    <a href="{% url 'listar_estudantes' %}"
+                       class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+<style>
+    #id_new_password1,
+    #id_new_password2 {
+        display: block;
+        width: 100%;
+        padding: 0.65rem 0.85rem;
+        border: 1px solid #E5E2D9;
+        border-radius: 0.5rem;
+    }
+</style>
+
+{% endblock %}
